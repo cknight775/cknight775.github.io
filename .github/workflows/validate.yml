@@ -33,5 +33,8 @@ jobs:
       - name: Check types and build
         run: npm run build
 
+      - name: Verify production content policy
+        run: npm run check:production-content
+
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high

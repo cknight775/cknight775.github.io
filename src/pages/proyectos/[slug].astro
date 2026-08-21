@@ -1,12 +1,14 @@
 ---
 import Header from '@/components/Header.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { isVisibleContent } from '@/data/publication';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
+  const previewEnabled = import.meta.env.CONTENT_PREVIEW === 'true';
   const projects = await getCollection('projects');
   return projects
-    .filter(({ data }) => data.review.visibility !== 'private')
+    .filter(({ data }) => isVisibleContent(data.review, previewEnabled))
     .map((project) => ({
       params: { slug: project.id },
       props: { project },

@@ -89,6 +89,21 @@ nav a:hover,
 nav a:focus-visible {
   color: var(--text);
 }
+.menu-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--text);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+.menu-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 4px;
@@ -338,6 +353,21 @@ p {
 .project-card:hover {
   background: rgba(255, 255, 255, 0.025);
 }
+.project-card--nfcores {
+  margin-top: 1rem;
+  padding-inline: 1.25rem;
+  border: 1px solid rgba(112, 165, 255, 0.45);
+  background: linear-gradient(
+    90deg,
+    rgba(112, 165, 255, 0.1),
+    rgba(78, 225, 179, 0.025)
+  );
+}
+.project-card--nfcores .project-index,
+.project-card--nfcores p,
+.project-card--nfcores > strong {
+  color: var(--accent-blue);
+}
 .project-index,
 .project-card p {
   color: var(--accent);
@@ -491,18 +521,41 @@ footer {
   }
   .site-header {
     gap: 1rem;
+    position: relative;
   }
-  nav {
-    flex: 1;
-    justify-content: flex-end;
-    gap: 0.85rem;
-    overflow-x: auto;
-    padding: 0.5rem 0;
-    scrollbar-width: thin;
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  nav a {
-    flex: 0 0 auto;
-    font-size: 0.78rem;
+  #primary-navigation {
+    display: none;
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+  #primary-navigation[data-open] {
+    display: flex;
+  }
+  #primary-navigation a {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+  }
+  #primary-navigation a:hover,
+  #primary-navigation a:focus-visible {
+    background: rgba(78, 225, 179, 0.1);
   }
   .hero {
     min-height: auto;

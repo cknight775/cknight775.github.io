@@ -15,9 +15,11 @@
   "review": {
     "validation": "draft",
     "visibility": "preview",
+    "status": "draft",
     "opsec": "pending",
     "institutionalAuthorization": "pending",
     "sanitized": true,
+    "verifiedLinks": [],
     "lastReviewed": "2026-08-21"
   }
 }

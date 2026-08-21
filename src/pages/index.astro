@@ -8,10 +8,12 @@ import {
   specialties,
   technologies,
 } from '@/data/profile';
+import { isVisibleContent } from '@/data/publication';
 import { getCollection } from 'astro:content';
 
+const previewEnabled = import.meta.env.CONTENT_PREVIEW === 'true';
 const projects = (await getCollection('projects'))
-  .filter(({ data }) => data.review.visibility !== 'private')
+  .filter(({ data }) => isVisibleContent(data.review, previewEnabled))
   .sort((a, b) => a.data.order - b.data.order);
 ---
 
@@ -130,7 +132,13 @@ const projects = (await getCollection('projects'))
         <div class="project-list">
           {
             projects.map((project, index) => (
-              <a class="project-card" href={`/proyectos/${project.id}/`}>
+              <a
+                class:list={[
+                  'project-card',
+                  { 'project-card--nfcores': project.id === 'nfcores' },
+                ]}
+                href={`/proyectos/${project.id}/`}
+              >
                 <span class="project-index">0{index + 1}</span>
                 <div>
                   <>

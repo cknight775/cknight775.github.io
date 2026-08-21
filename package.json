@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "check:secrets": "node scripts/check-secrets.mjs",
+    "check:production-content": "node scripts/verify-production-content.mjs",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },

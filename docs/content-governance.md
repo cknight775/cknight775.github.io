@@ -14,9 +14,16 @@ de contenido y el build mediante `src/content.config.ts`.
 - `review.sanitized`: confirma que la entrada fue preparada para no exponer
   información sensible; no equivale por sí sola a aprobación OPSEC.
 
-`private` impide generar la entrada. `preview` permite revisarla dentro de la PR
-sin declarar que está autorizada para producción. Solo `public`, junto con los
-estados de aprobación aplicables, podrá utilizarse para publicación.
+`private` impide generar la entrada. El build normal incluye exclusivamente
+`public`. Una entrada pública exige `validation: approved`,
+`sanitized: true` y estados OPSEC y de autorización institucional en
+`approved` o `not-required`. Una combinación pública inválida falla al
+sincronizar la colección.
+
+`preview` solo se habilita explícitamente con `CONTENT_PREVIEW=true` en un
+entorno de revisión. Este modo no se utiliza en CI de producción. El paso
+`npm run check:production-content` inspecciona el resultado normal y falla si
+detecta títulos o rutas de entradas no públicas.
 
 Los casos institucionales permanecen como borradores sanitizados, visibles
 únicamente para preview, con OPSEC y autorización institucional pendientes.

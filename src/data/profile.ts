@@ -1,4 +1,11 @@
-export const profile = {
+import {
+  credentialSchema,
+  educationSchema,
+  profileSchema,
+  trainingSchema,
+} from './schemas';
+
+export const profile = profileSchema.parse({
   name: 'Cristóbal Catalán Guerrero',
   shortName: 'Cristóbal Catalán',
   eyebrow: 'Ciberseguridad · Concientización · Desarrollo seguro',
@@ -20,7 +27,27 @@ export const profile = {
     { value: '2', label: 'plataformas en producción' },
   ],
   status: 'Perfil profesional verificado',
-} as const;
+  review: {
+    validation: 'approved',
+    visibility: 'public',
+    status: 'active',
+    opsec: 'not-required',
+    institutionalAuthorization: 'not-required',
+    sanitized: true,
+    verifiedLinks: [
+      { label: 'GitHub', url: 'https://github.com/cknight775' },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/crist%C3%B3bal-catal%C3%A1n-guerrero-5a2299183',
+      },
+      {
+        label: 'Credly',
+        url: 'https://www.credly.com/users/cristobal-catalan',
+      },
+    ],
+    lastReviewed: '2026-08-21',
+  },
+});
 
 export const experience = [
   {
@@ -54,45 +81,99 @@ export const education = [
     program: 'Ingeniería en Ciberseguridad',
     institution: 'Instituto Profesional San Sebastián',
     period: '2019 — 2022',
-    validation: 'cv-verified',
-    visibility: 'preview',
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'completed',
+      opsec: 'pending',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
   },
   {
     program: 'Diplomado en Gestión de Ciberseguridad',
     institution: 'Academia Politécnica Militar',
     period: '2022',
-    validation: 'cv-verified',
-    visibility: 'preview',
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'completed',
+      opsec: 'pending',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
   },
   {
     program: 'Técnico de Nivel Superior en Telecomunicaciones',
     institution: 'Escuela de Telecomunicaciones del Ejército de Chile',
     period: '2017 — 2018',
-    validation: 'cv-verified',
-    visibility: 'preview',
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'completed',
+      opsec: 'pending',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
   },
-] as const;
+].map((item) => educationSchema.parse(item));
 
 export const certifications = [
-  {
-    name: 'Desarrollo Full Stack JavaScript',
-    issuer: 'Desafío Latam',
-    year: 2026,
-    status: 'in-progress',
-  },
   {
     name: 'Fortinet Certified Fundamentals in Cybersecurity',
     issuer: 'Fortinet',
     year: 2024,
-    status: 'cv-verified',
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'obtained',
+      opsec: 'not-required',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
   },
   {
     name: 'Scrum Foundation Professional Certification (SFPC)',
     issuer: 'CertiProf',
     year: 2024,
-    status: 'cv-verified',
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'obtained',
+      opsec: 'not-required',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
   },
-] as const;
+].map((item) => credentialSchema.parse(item));
+
+export const complementaryTraining = [
+  {
+    name: 'Desarrollo Full Stack JavaScript',
+    issuer: 'Desafío Latam',
+    year: 2026,
+    review: {
+      validation: 'verified',
+      visibility: 'preview',
+      status: 'in-progress',
+      opsec: 'not-required',
+      institutionalAuthorization: 'not-required',
+      sanitized: true,
+      verifiedLinks: [],
+      lastReviewed: '2026-08-21',
+    },
+  },
+].map((item) => trainingSchema.parse(item));
 
 export const contact = {
   email: profile.email,
@@ -104,8 +185,9 @@ export const contact = {
 export const contentGovernance = {
   locale: 'es',
   futureLocales: [] as const,
-  education: { validation: 'cv-verified', visibility: 'preview' },
-  certifications: { validation: 'cv-verified', visibility: 'preview' },
+  education: { validation: 'verified', visibility: 'preview' },
+  certifications: { validation: 'verified', visibility: 'preview' },
+  complementaryTraining: { validation: 'verified', visibility: 'preview' },
 } as const;
 
 export const specialties = [
