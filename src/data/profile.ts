@@ -19,6 +19,7 @@ export const profile = {
     { value: '5', label: 'personas lideradas' },
     { value: '2', label: 'plataformas en producción' },
   ],
+  status: 'Perfil profesional verificado',
 } as const;
 
 export const specialties = [

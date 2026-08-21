@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.19.0 <23"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
@@ -20,6 +23,9 @@
   "devDependencies": {
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1"
+  },
+  "overrides": {
+    "sharp": "0.35.3"
   }
 }
 

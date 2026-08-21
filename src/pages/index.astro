@@ -26,7 +26,8 @@ import { projects } from '@/data/projects';
         </div>
         <aside class="hero-card" aria-label="Resumen profesional">
           <div class="signal">
-            <span></span> Disponible para nuevos desafíos
+            <span></span>
+            {profile.status}
           </div>
           <p class="mono">// perfil profesional</p>
           <h2>{profile.shortName}</h2>
@@ -55,7 +56,7 @@ import { projects } from '@/data/projects';
       <section id="perfil" class="section-block">
         <div class="section-heading">
           <p class="eyebrow">Perfil</p>
-          <h2>Tres disciplinas.<br />Una mirada integral.</h2>
+          <h2>Cuatro capacidades.<br />Una mirada integral.</h2>
           <p>
             La seguridad no termina en una alerta: también necesita personas
             preparadas y herramientas que permitan actuar.
@@ -83,6 +84,11 @@ import { projects } from '@/data/projects';
         <div class="section-heading">
           <p class="eyebrow">Trayectoria</p>
           <h2>Experiencia construida desde la operación.</h2>
+          <p>
+            Desde 2021, las responsabilidades de concientización se desarrollan
+            de manera concurrente con las funciones de análisis y respuesta a
+            incidentes iniciadas en 2019.
+          </p>
         </div>
         <div class="timeline">
           <article>
@@ -187,7 +193,8 @@ import { projects } from '@/data/projects';
     </main>
     <footer>
       <span>© {new Date().getFullYear()} {profile.name}</span><span
-        >Construido con Astro · Sin analítica</span>
+        >Construido con Astro · Sin analítica</span
+      >
     </footer>
   </div>
 </BaseLayout>

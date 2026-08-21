@@ -486,9 +486,23 @@ footer {
   .site-header {
     min-height: 76px;
   }
-  .brand small,
-  nav a:not(:last-child) {
+  .brand small {
     display: none;
+  }
+  .site-header {
+    gap: 1rem;
+  }
+  nav {
+    flex: 1;
+    justify-content: flex-end;
+    gap: 0.85rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+  }
+  nav a {
+    flex: 0 0 auto;
+    font-size: 0.78rem;
   }
   .hero {
     min-height: auto;
