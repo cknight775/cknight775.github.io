@@ -13,8 +13,20 @@ npm run dev
 
 ```bash
 npm run format
+npm run check:secrets
 npm run build
 ```
+
+## Alcance de Astro y TypeScript
+
+- `tsconfig.json` limita el análisis a `.astro/types.d.ts`, `astro.config.mjs` y
+  `src/**/*`, que constituyen la nueva aplicación Astro.
+- `assets/**`, `forms/**`, `index.html`, `dist/**` y `node_modules/**` quedan
+  excluidos. Los tres primeros pertenecen al sitio heredado que debe conservarse
+  mientras la PR permanezca en borrador; se retirarán de esta excepción cuando la
+  reconstrucción reemplace formalmente al sitio antiguo.
+- Esta exclusión solo evita diagnósticos ajenos a Foundation. No incorpora ni
+  publica código legado en la aplicación Astro.
 
 ## Alcance temporal de Prettier
 
@@ -31,6 +43,14 @@ npm run build
 
 El análisis vigente y las decisiones de remediación se documentan en
 [`docs/security/dependency-review.md`](docs/security/dependency-review.md).
+
+## Revisión de secretos
+
+`npm run check:secrets` inspecciona los archivos versionables del repositorio y
+falla ante claves privadas, tokens conocidos, credenciales incrustadas o archivos
+`.env` reales. Se permiten únicamente archivos de ejemplo sin valores privados.
+El chequeo se ejecuta también en CI. Es una barrera preventiva y no sustituye la
+revocación inmediata si alguna credencial llegara a exponerse.
 
 ## Reglas de contenido
 

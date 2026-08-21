@@ -11,6 +11,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:secrets": "node scripts/check-secrets.mjs",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
