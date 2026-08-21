@@ -1,9 +1,24 @@
 import {
+  contactSchema,
   credentialSchema,
   educationSchema,
+  experienceSchema,
   profileSchema,
+  specialtySchema,
+  technologySchema,
   trainingSchema,
 } from './schemas';
+
+const publicReview = () => ({
+  validation: 'approved' as const,
+  visibility: 'public' as const,
+  status: 'active' as const,
+  opsec: 'not-required' as const,
+  institutionalAuthorization: 'not-required' as const,
+  sanitized: true,
+  verifiedLinks: [],
+  lastReviewed: '2026-08-21',
+});
 
 export const profile = profileSchema.parse({
   name: 'Cristóbal Catalán Guerrero',
@@ -56,7 +71,7 @@ export const experience = [
     description:
       'Dirección de un equipo de cinco personas, campañas y formación para audiencias institucionales.',
     concurrent: true,
-    validation: 'verified',
+    review: publicReview(),
   },
   {
     period: '2019 — Actualidad',
@@ -64,7 +79,7 @@ export const experience = [
     description:
       'Monitoreo, correlación y respuesta en operaciones SOC dentro de un entorno crítico.',
     concurrent: true,
-    validation: 'verified',
+    review: publicReview(),
   },
   {
     period: '2020 — 2021',
@@ -72,9 +87,9 @@ export const experience = [
     description:
       'Administración de servidores, portales educativos y mantenimiento de soluciones web.',
     concurrent: false,
-    validation: 'verified',
+    review: publicReview(),
   },
-] as const;
+].map((item) => experienceSchema.parse(item));
 
 export const education = [
   {
@@ -175,12 +190,15 @@ export const complementaryTraining = [
   },
 ].map((item) => trainingSchema.parse(item));
 
-export const contact = {
+export const contact = contactSchema.parse({
   email: profile.email,
   links: profile.links,
-  visibility: 'public',
   excludes: ['phone', 'physicalAddress'],
-} as const;
+  review: {
+    ...publicReview(),
+    verifiedLinks: profile.review.verifiedLinks,
+  },
+});
 
 export const contentGovernance = {
   locale: 'es',
@@ -197,6 +215,7 @@ export const specialties = [
     description:
       'Monitoreo, detección, correlación y respuesta a incidentes en entornos SOC.',
     tags: ['Blue Team', 'SIEM', 'EDR/XDR'],
+    review: publicReview(),
   },
   {
     number: '02',
@@ -204,6 +223,7 @@ export const specialties = [
     description:
       'Programas, campañas y charlas que convierten amenazas complejas en acciones comprensibles.',
     tags: ['Cultura', 'Formación', 'Comunicación'],
+    review: publicReview(),
   },
   {
     number: '03',
@@ -211,6 +231,7 @@ export const specialties = [
     description:
       'Plataformas web que responden a necesidades operacionales dentro de entornos críticos.',
     tags: ['React', 'TypeScript', 'Node.js'],
+    review: publicReview(),
   },
   {
     number: '04',
@@ -218,8 +239,9 @@ export const specialties = [
     description:
       'Coordinación de equipos y trabajo transversal entre seguridad, contenido y tecnología.',
     tags: ['Equipo', 'Estrategia', 'Ejecución'],
+    review: publicReview(),
   },
-] as const;
+].map((item) => specialtySchema.parse(item));
 
 export const technologies = [
   {
@@ -231,14 +253,17 @@ export const technologies = [
       'EDR/XDR',
       'Hardening',
     ],
+    review: publicReview(),
   },
   {
     title: 'Desarrollo',
     items: ['React', 'TypeScript', 'Vite', 'Node.js', 'Express'],
+    review: publicReview(),
   },
   {
     title: 'Datos y sistemas',
     items: ['PostgreSQL', 'Prisma ORM', 'Linux', 'Windows Server', 'Git'],
+    review: publicReview(),
   },
   {
     title: 'Gestión',
@@ -248,5 +273,6 @@ export const technologies = [
       'Comunicación técnica',
       'Formación',
     ],
+    review: publicReview(),
   },
-] as const;
+].map((item) => technologySchema.parse(item));

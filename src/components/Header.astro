@@ -1,8 +1,17 @@
 ---
+interface Props {
+  showProjects?: boolean;
+  showCredentials?: boolean;
+}
+
+const { showProjects = false, showCredentials = false } = Astro.props;
 const links = [
   { href: '/#perfil', label: 'Perfil' },
   { href: '/#experiencia', label: 'Experiencia' },
-  { href: '/#proyectos', label: 'Proyectos' },
+  ...(showProjects ? [{ href: '/#proyectos', label: 'Proyectos' }] : []),
+  ...(showCredentials
+    ? [{ href: '/#credenciales', label: 'Credenciales' }]
+    : []),
   { href: '/#contacto', label: 'Contacto' },
 ];
 ---

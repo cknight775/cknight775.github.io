@@ -42,3 +42,32 @@ export const trainingSchema = credentialSchema.extend({
     message: 'Complementary training must use status=in-progress.',
   }),
 });
+
+export const experienceSchema = z.object({
+  period: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  concurrent: z.boolean(),
+  review: reviewSchema,
+});
+
+export const specialtySchema = z.object({
+  number: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  tags: z.array(z.string().min(1)).min(1),
+  review: reviewSchema,
+});
+
+export const technologySchema = z.object({
+  title: z.string().min(1),
+  items: z.array(z.string().min(1)).min(1),
+  review: reviewSchema,
+});
+
+export const contactSchema = z.object({
+  email: z.email(),
+  links: linkSchema,
+  excludes: z.array(z.enum(['phone', 'physicalAddress'])),
+  review: reviewSchema,
+});

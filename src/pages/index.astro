@@ -2,7 +2,10 @@
 import Header from '@/components/Header.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import {
+  certifications,
+  complementaryTraining,
   contact,
+  education,
   experience,
   profile,
   specialties,
@@ -12,14 +15,45 @@ import { isVisibleContent } from '@/data/publication';
 import { getCollection } from 'astro:content';
 
 const previewEnabled = import.meta.env.CONTENT_PREVIEW === 'true';
+if (!isVisibleContent(profile.review, previewEnabled)) {
+  throw new Error('The homepage profile is not eligible for this build.');
+}
+
+const visibleExperience = experience.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const visibleSpecialties = specialties.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const visibleTechnologies = technologies.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const visibleEducation = education.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const visibleCertifications = certifications.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const visibleTraining = complementaryTraining.filter(({ review }) =>
+  isVisibleContent(review, previewEnabled),
+);
+const contactVisible = isVisibleContent(contact.review, previewEnabled);
 const projects = (await getCollection('projects'))
   .filter(({ data }) => isVisibleContent(data.review, previewEnabled))
   .sort((a, b) => a.data.order - b.data.order);
+const showCredentials =
+  visibleEducation.length +
+    visibleCertifications.length +
+    visibleTraining.length >
+  0;
 ---
 
 <BaseLayout>
   <div class="page-shell">
-    <Header />
+    <Header
+      showProjects={projects.length > 0}
+      showCredentials={showCredentials}
+    />
     <main id="contenido">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
@@ -30,9 +64,18 @@ const projects = (await getCollection('projects'))
           </h1>
           <p class="hero-positioning">{profile.positioning}</p>
           <div class="actions">
-            <a class="button primary" href="#proyectos">Explorar proyectos</a>
+            {
+              projects.length > 0 && (
+                <a class="button primary" href="#proyectos">
+                  Explorar proyectos
+                </a>
+              )
+            }
             <a class="button secondary" href={profile.links.linkedin}
               >Ver LinkedIn</a
+            >
+            <a class="button secondary" href={profile.links.github}
+              >Ver GitHub</a
             >
           </div>
         </div>
@@ -76,7 +119,7 @@ const projects = (await getCollection('projects'))
         </div>
         <div class="specialty-grid">
           {
-            specialties.map((item) => (
+            visibleSpecialties.map((item) => (
               <article class="specialty-card">
                 <span class="card-number">{item.number}</span>
                 <h3>{item.title}</h3>
@@ -104,7 +147,7 @@ const projects = (await getCollection('projects'))
         </div>
         <div class="timeline">
           {
-            experience.map((item) => (
+            visibleExperience.map((item) => (
               <article>
                 <time>{item.period}</time>
                 <div>
@@ -117,42 +160,48 @@ const projects = (await getCollection('projects'))
         </div>
       </section>
 
-      <section id="proyectos" class="section-block projects">
-        <div class="section-heading horizontal">
-          <div>
-            <p class="eyebrow">Casos de estudio</p><h2>
-              De la necesidad<br />a la solución.
-            </h2>
-          </div>
-          <p>
-            Casos públicos y sanitizados que explican responsabilidades y
-            decisiones sin exponer información operacional.
-          </p>
-        </div>
-        <div class="project-list">
-          {
-            projects.map((project, index) => (
-              <a
-                class:list={[
-                  'project-card',
-                  { 'project-card--nfcores': project.id === 'nfcores' },
-                ]}
-                href={`/proyectos/${project.id}/`}
-              >
-                <span class="project-index">0{index + 1}</span>
-                <div>
-                  <>
-                    <p>{project.data.eyebrow}</p>
-                    <h3>{project.data.title}</h3>
-                    <span>{project.data.summary}</span>
-                  </>
-                </div>
-                <strong aria-hidden="true">↗</strong>
-              </a>
-            ))
-          }
-        </div>
-      </section>
+      {
+        projects.length > 0 && (
+          <section id="proyectos" class="section-block projects">
+            <div class="section-heading horizontal">
+              <div>
+                <>
+                  <p class="eyebrow">Casos de estudio</p>
+                  <h2>
+                    De la necesidad
+                    <br />a la solución.
+                  </h2>
+                </>
+              </div>
+              <p>
+                Casos públicos y sanitizados que explican responsabilidades y
+                decisiones sin exponer información operacional.
+              </p>
+            </div>
+            <div class="project-list">
+              {projects.map((project, index) => (
+                <a
+                  class:list={[
+                    'project-card',
+                    { 'project-card--nfcores': project.id === 'nfcores' },
+                  ]}
+                  href={`/proyectos/${project.id}/`}
+                >
+                  <span class="project-index">0{index + 1}</span>
+                  <div>
+                    <>
+                      <p>{project.data.eyebrow}</p>
+                      <h3>{project.data.title}</h3>
+                      <span>{project.data.summary}</span>
+                    </>
+                  </div>
+                  <strong aria-hidden="true">↗</strong>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       <section class="section-block stack">
         <div class="section-heading">
@@ -160,7 +209,7 @@ const projects = (await getCollection('projects'))
         </div>
         <div class="stack-grid">
           {
-            technologies.map((group) => (
+            visibleTechnologies.map((group) => (
               <article>
                 <>
                   <h3>{group.title}</h3>
@@ -176,22 +225,67 @@ const projects = (await getCollection('projects'))
         </div>
       </section>
 
-      <section id="contacto" class="contact">
-        <p class="eyebrow">Contacto</p>
-        <h2>Conversemos sobre el próximo desafío.</h2>
-        <p>
-          Para oportunidades profesionales, proyectos o colaboraciones
-          tecnológicas.
-        </p>
-        <a class="button light" href={`mailto:${contact.email}`}
-          >Escribir por correo</a
-        >
-        <div class="social-links">
-          <a href={contact.links.linkedin}>LinkedIn</a>
-          <a href={contact.links.github}>GitHub</a>
-          <a href={contact.links.credly}>Credly</a>
-        </div>
-      </section>
+      {
+        showCredentials && (
+          <section id="credenciales" class="section-block credentials">
+            <div class="section-heading">
+              <p class="eyebrow">Formación verificable</p>
+              <h2>Aprendizaje con estado visible.</h2>
+              <p>
+                Esta sección solo aparece cuando cada registro supera las
+                puertas de visibilidad, validación y revisión correspondientes.
+              </p>
+            </div>
+            <div class="credential-grid">
+              {visibleEducation.map((item) => (
+                <article>
+                  <p class="credential-kind">Educación</p>
+                  <h3>{item.program}</h3>
+                  <p>{item.institution}</p>
+                  <span>{item.period}</span>
+                </article>
+              ))}
+              {visibleCertifications.map((item) => (
+                <article>
+                  <p class="credential-kind">Certificación</p>
+                  <h3>{item.name}</h3>
+                  <p>{item.issuer}</p>
+                  <span>{item.year}</span>
+                </article>
+              ))}
+              {visibleTraining.map((item) => (
+                <article>
+                  <p class="credential-kind">Formación en curso</p>
+                  <h3>{item.name}</h3>
+                  <p>{item.issuer}</p>
+                  <span>{item.year} · En curso</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        contactVisible && (
+          <section id="contacto" class="contact">
+            <p class="eyebrow">Contacto</p>
+            <h2>Conversemos sobre el próximo desafío.</h2>
+            <p>
+              Para oportunidades profesionales, proyectos o colaboraciones
+              tecnológicas.
+            </p>
+            <a class="button light" href={`mailto:${contact.email}`}>
+              Escribir por correo
+            </a>
+            <div class="social-links">
+              <a href={contact.links.linkedin}>LinkedIn</a>
+              <a href={contact.links.github}>GitHub</a>
+              <a href={contact.links.credly}>Credly</a>
+            </div>
+          </section>
+        )
+      }
     </main>
     <footer>
       <span>© {new Date().getFullYear()} {profile.name}</span><span

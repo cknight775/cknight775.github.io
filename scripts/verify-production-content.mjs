@@ -22,6 +22,19 @@ const generated = (
 ).join('\n');
 const leaked = [];
 
+const structuredNonPublicMarkers = [
+  'Ingeniería en Ciberseguridad',
+  'Instituto Profesional San Sebastián',
+  'Diplomado en Gestión de Ciberseguridad',
+  'Academia Politécnica Militar',
+  'Técnico de Nivel Superior en Telecomunicaciones',
+  'Escuela de Telecomunicaciones del Ejército de Chile',
+  'Fortinet Certified Fundamentals in Cybersecurity',
+  'Scrum Foundation Professional Certification (SFPC)',
+  'Desarrollo Full Stack JavaScript',
+  'Desafío Latam',
+];
+
 for (const path of sourceFiles) {
   const entry = JSON.parse(await readFile(path, 'utf8'));
   if (
@@ -30,6 +43,12 @@ for (const path of sourceFiles) {
       generated.includes(path.split(/[\\/]/).at(-1).replace('.json', '')))
   ) {
     leaked.push(`${entry.title} (${entry.review.visibility})`);
+  }
+}
+
+for (const marker of structuredNonPublicMarkers) {
+  if (generated.includes(marker)) {
+    leaked.push(`${marker} (structured preview content)`);
   }
 }
 
