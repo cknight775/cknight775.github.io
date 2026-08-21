@@ -6,4 +6,3 @@ export default defineConfig({
   output: 'static',
   integrations: [sitemap()],
 });
-

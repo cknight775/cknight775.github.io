@@ -73,4 +73,3 @@ export const projects: Project[] = [
       'El catálogo y los resultados se incorporarán únicamente después de validar cada producto y enlace público.',
   },
 ];
-

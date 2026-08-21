@@ -45,4 +45,3 @@ siguiente:
 No se requiere excepción temporal porque existe una versión correctiva
 compatible. Esta decisión deberá revisarse si Astro modifica su rango aceptado o
 si un advisory nuevo afecta a `sharp 0.35.3`.
-

@@ -40,4 +40,3 @@ El análisis vigente y las decisiones de remediación se documentan en
 - Los casos institucionales requieren revisión OPSEC antes del despliegue.
 
 El seguimiento del proyecto se mantiene en el [issue maestro #1](https://github.com/cknight775/cknight775.github.io/issues/1).
-

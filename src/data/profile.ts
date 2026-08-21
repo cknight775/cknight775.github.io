@@ -82,4 +82,3 @@ export const technologies = [
     ],
   },
 ] as const;
-

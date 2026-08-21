@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://cknight775.github.io/sitemap-index.xml
-
