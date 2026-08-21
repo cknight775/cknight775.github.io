@@ -23,7 +23,7 @@ evidencia; no se realiza despliegue.
 
 ## Evidencia visual
 
-La captura `docs/evidence/mobile-home-390x844.png` corresponde a la portada con un
+La captura `docs/evidence/mobile-home-390x844.jpg` corresponde a la portada con un
 viewport de 390 × 844 px. Confirma que la navegación principal permanece accesible
 en móvil. El desplazamiento horizontal de esta navegación se mantiene como mejora
 de UX posterior y deberá resolverse antes de publicar.
