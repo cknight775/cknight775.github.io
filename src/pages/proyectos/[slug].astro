@@ -1,59 +1,65 @@
 ---
 import Header from '@/components/Header.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { projects } from '@/data/projects';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-export function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
-  }));
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects
+    .filter(({ data }) => data.review.visibility !== 'private')
+    .map((project) => ({
+      params: { slug: project.id },
+      props: { project },
+    }));
 }
 
-const { project } = Astro.props;
+const { project } = Astro.props as {
+  project: CollectionEntry<'projects'>;
+};
+const content = project.data;
 ---
 
 <BaseLayout
-  title={`${project.title} | Cristóbal Catalán`}
-  description={project.summary}
+  title={`${content.title} | Cristóbal Catalán`}
+  description={content.summary}
 >
   <div class="page-shell">
     <Header />
     <main id="contenido" class="case-study">
       <a class="back-link" href="/#proyectos">← Volver a proyectos</a>
       <header class="case-hero">
-        <p class="eyebrow">{project.eyebrow}</p>
-        <h1>{project.title}</h1>
-        <p>{project.summary}</p>
+        <p class="eyebrow">{content.eyebrow}</p>
+        <h1>{content.title}</h1>
+        <p>{content.summary}</p>
       </header>
       <div class="case-grid">
         <section>
           <p class="eyebrow">Contexto</p><h2>El desafío</h2><p>
-            {project.context}
+            {content.context}
           </p>
         </section>
         <section>
           <p class="eyebrow">Responsabilidad</p><h2>Mi rol</h2><p>
-            {project.role}
+            {content.role}
           </p>
         </section>
         <section class="wide">
           <p class="eyebrow">Enfoque</p><h2>Decisiones principales</h2><ul>
-            {project.approach.map((item) => <li>{item}</li>)}
+            {content.approach.map((item) => <li>{item}</li>)}
           </ul>
         </section>
         <section class="wide">
           <p class="eyebrow">Tecnologías publicables</p><div class="tag-row">
-            {project.technologies.map((item) => <span>{item}</span>)}
+            {content.technologies.map((item) => <span>{item}</span>)}
           </div>
         </section>
       </div>
       {
-        project.notice && (
+        content.notice && (
           <aside class="security-note">
             <>
               <strong>Nota de alcance y seguridad</strong>
-              <p>{project.notice}</p>
+              <p>{content.notice}</p>
             </>
           </aside>
         )

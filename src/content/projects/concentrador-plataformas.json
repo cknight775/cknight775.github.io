@@ -1,0 +1,30 @@
+{
+  "order": 2,
+  "eyebrow": "Caso institucional sanitizado",
+  "title": "Concentrador de Plataformas",
+  "summary": "Portal que ordena el acceso a aplicaciones y servicios, con gestión de contenidos e identidad visual desde un panel administrativo.",
+  "context": "La solución respondió a una necesidad de organización y acceso dentro de un entorno institucional crítico.",
+  "role": "Diseño y desarrollo completo, evolucionando desde un sitio estático hacia una aplicación full-stack con persistencia de datos.",
+  "approach": [
+    "Arquitectura de información por secciones y subsecciones.",
+    "Gestión centralizada de accesos, avisos y documentos.",
+    "Persistencia y administración mediante una interfaz propia."
+  ],
+  "technologies": [
+    "React",
+    "Vite",
+    "Node.js",
+    "Express",
+    "Prisma ORM",
+    "PostgreSQL"
+  ],
+  "notice": "Este caso no representa la arquitectura real ni expone servicios, accesos o controles institucionales.",
+  "review": {
+    "validation": "draft",
+    "visibility": "preview",
+    "opsec": "pending",
+    "institutionalAuthorization": "pending",
+    "sanitized": true,
+    "lastReviewed": "2026-08-21"
+  }
+}

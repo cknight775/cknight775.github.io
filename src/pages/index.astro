@@ -1,8 +1,18 @@
 ---
 import Header from '@/components/Header.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { profile, specialties, technologies } from '@/data/profile';
-import { projects } from '@/data/projects';
+import {
+  contact,
+  experience,
+  profile,
+  specialties,
+  technologies,
+} from '@/data/profile';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .filter(({ data }) => data.review.visibility !== 'private')
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <BaseLayout>
@@ -91,33 +101,17 @@ import { projects } from '@/data/projects';
           </p>
         </div>
         <div class="timeline">
-          <article>
-            <time>2021 — Actualidad</time>
-            <div>
-              <h3>Jefe de Concientización en Ciberseguridad</h3><p>
-                Dirección de un equipo de cinco personas, campañas y formación
-                para audiencias institucionales.
-              </p>
-            </div>
-          </article>
-          <article>
-            <time>2019 — Actualidad</time>
-            <div>
-              <h3>Analista de Amenazas y Respuesta a Incidentes</h3><p>
-                Monitoreo, correlación y respuesta en operaciones SOC dentro de
-                un entorno crítico.
-              </p>
-            </div>
-          </article>
-          <article>
-            <time>2020 — 2021</time>
-            <div>
-              <h3>Administrador de Sitios Web</h3><p>
-                Administración de servidores, portales educativos y
-                mantenimiento de soluciones web.
-              </p>
-            </div>
-          </article>
+          {
+            experience.map((item) => (
+              <article>
+                <time>{item.period}</time>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))
+          }
         </div>
       </section>
 
@@ -136,13 +130,13 @@ import { projects } from '@/data/projects';
         <div class="project-list">
           {
             projects.map((project, index) => (
-              <a class="project-card" href={`/proyectos/${project.slug}/`}>
+              <a class="project-card" href={`/proyectos/${project.id}/`}>
                 <span class="project-index">0{index + 1}</span>
                 <div>
                   <>
-                    <p>{project.eyebrow}</p>
-                    <h3>{project.title}</h3>
-                    <span>{project.summary}</span>
+                    <p>{project.data.eyebrow}</p>
+                    <h3>{project.data.title}</h3>
+                    <span>{project.data.summary}</span>
                   </>
                 </div>
                 <strong aria-hidden="true">↗</strong>
@@ -181,13 +175,13 @@ import { projects } from '@/data/projects';
           Para oportunidades profesionales, proyectos o colaboraciones
           tecnológicas.
         </p>
-        <a class="button light" href={`mailto:${profile.email}`}
+        <a class="button light" href={`mailto:${contact.email}`}
           >Escribir por correo</a
         >
         <div class="social-links">
-          <a href={profile.links.linkedin}>LinkedIn</a>
-          <a href={profile.links.github}>GitHub</a>
-          <a href={profile.links.credly}>Credly</a>
+          <a href={contact.links.linkedin}>LinkedIn</a>
+          <a href={contact.links.github}>GitHub</a>
+          <a href={contact.links.credly}>Credly</a>
         </div>
       </section>
     </main>

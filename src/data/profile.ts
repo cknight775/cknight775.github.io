@@ -22,6 +22,51 @@ export const profile = {
   status: 'Perfil profesional verificado',
 } as const;
 
+export const experience = [
+  {
+    period: '2021 — Actualidad',
+    title: 'Jefe de Concientización en Ciberseguridad',
+    description:
+      'Dirección de un equipo de cinco personas, campañas y formación para audiencias institucionales.',
+    concurrent: true,
+    validation: 'verified',
+  },
+  {
+    period: '2019 — Actualidad',
+    title: 'Analista de Amenazas y Respuesta a Incidentes',
+    description:
+      'Monitoreo, correlación y respuesta en operaciones SOC dentro de un entorno crítico.',
+    concurrent: true,
+    validation: 'verified',
+  },
+  {
+    period: '2020 — 2021',
+    title: 'Administrador de Sitios Web',
+    description:
+      'Administración de servidores, portales educativos y mantenimiento de soluciones web.',
+    concurrent: false,
+    validation: 'verified',
+  },
+] as const;
+
+// Se mantienen vacíos hasta contar con evidencia verificable y aprobación.
+export const education = [] as const;
+export const certifications = [] as const;
+
+export const contact = {
+  email: profile.email,
+  links: profile.links,
+  visibility: 'public',
+  excludes: ['phone', 'physicalAddress'],
+} as const;
+
+export const contentGovernance = {
+  locale: 'es',
+  futureLocales: [] as const,
+  education: { validation: 'pending', visibility: 'private' },
+  certifications: { validation: 'pending', visibility: 'private' },
+} as const;
+
 export const specialties = [
   {
     number: '01',
