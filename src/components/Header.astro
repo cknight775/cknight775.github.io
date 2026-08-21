@@ -1,0 +1,19 @@
+---
+const links = [
+  { href: '/#perfil', label: 'Perfil' },
+  { href: '/#experiencia', label: 'Experiencia' },
+  { href: '/#proyectos', label: 'Proyectos' },
+  { href: '/#contacto', label: 'Contacto' },
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Ir al inicio">
+    <span>CC</span>
+    <small>Ciberseguridad · Producto</small>
+  </a>
+  <nav aria-label="Navegación principal">
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
+  </nav>
+</header>
+
