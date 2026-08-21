@@ -49,9 +49,50 @@ export const experience = [
   },
 ] as const;
 
-// Se mantienen vacíos hasta contar con evidencia verificable y aprobación.
-export const education = [] as const;
-export const certifications = [] as const;
+export const education = [
+  {
+    program: 'Ingeniería en Ciberseguridad',
+    institution: 'Instituto Profesional San Sebastián',
+    period: '2019 — 2022',
+    validation: 'cv-verified',
+    visibility: 'preview',
+  },
+  {
+    program: 'Diplomado en Gestión de Ciberseguridad',
+    institution: 'Academia Politécnica Militar',
+    period: '2022',
+    validation: 'cv-verified',
+    visibility: 'preview',
+  },
+  {
+    program: 'Técnico de Nivel Superior en Telecomunicaciones',
+    institution: 'Escuela de Telecomunicaciones del Ejército de Chile',
+    period: '2017 — 2018',
+    validation: 'cv-verified',
+    visibility: 'preview',
+  },
+] as const;
+
+export const certifications = [
+  {
+    name: 'Desarrollo Full Stack JavaScript',
+    issuer: 'Desafío Latam',
+    year: 2026,
+    status: 'in-progress',
+  },
+  {
+    name: 'Fortinet Certified Fundamentals in Cybersecurity',
+    issuer: 'Fortinet',
+    year: 2024,
+    status: 'cv-verified',
+  },
+  {
+    name: 'Scrum Foundation Professional Certification (SFPC)',
+    issuer: 'CertiProf',
+    year: 2024,
+    status: 'cv-verified',
+  },
+] as const;
 
 export const contact = {
   email: profile.email,
@@ -63,8 +104,8 @@ export const contact = {
 export const contentGovernance = {
   locale: 'es',
   futureLocales: [] as const,
-  education: { validation: 'pending', visibility: 'private' },
-  certifications: { validation: 'pending', visibility: 'private' },
+  education: { validation: 'cv-verified', visibility: 'preview' },
+  certifications: { validation: 'cv-verified', visibility: 'preview' },
 } as const;
 
 export const specialties = [
