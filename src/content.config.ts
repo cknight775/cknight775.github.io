@@ -10,10 +10,19 @@ const projects = defineCollection({
     eyebrow: z.string().min(1),
     title: z.string().min(1),
     summary: z.string().min(1),
+    period: z.string().min(1),
+    status: z.enum(['active', 'completed', 'archived']),
     context: z.string().min(1),
     role: z.string().min(1),
     approach: z.array(z.string().min(1)).min(1),
+    outcome: z.string().min(1),
     technologies: z.array(z.string().min(1)).min(1),
+    publicLinks: z
+      .array(z.object({ label: z.string().min(1), url: z.url() }))
+      .optional(),
+    evidence: z
+      .array(z.object({ src: z.string().min(1), alt: z.string().min(1) }))
+      .optional(),
     notice: z.string().min(1),
     review: reviewSchema,
   }),

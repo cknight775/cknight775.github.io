@@ -34,6 +34,7 @@ export const credentialSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
   year: z.number().int(),
+  verificationUrl: z.url().optional(),
   review: reviewSchema,
 });
 

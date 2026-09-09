@@ -1,5 +1,5 @@
 ---
-import Header from '@/components/Header.astro';
+import Sidebar from '@/components/Sidebar.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import {
   certifications,
@@ -49,248 +49,297 @@ const showCredentials =
 ---
 
 <BaseLayout>
-  <div class="page-shell">
-    <Header
+  <div class="app-shell">
+    <Sidebar
       showProjects={projects.length > 0}
       showCredentials={showCredentials}
     />
-    <main id="contenido">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">{profile.eyebrow}</p>
-          <h1 id="hero-title">
-            Seguridad que se<br />
-            <span>entiende y funciona.</span>
-          </h1>
-          <p class="hero-positioning">{profile.positioning}</p>
-          <div class="actions">
-            {
-              projects.length > 0 && (
-                <a class="button primary" href="#proyectos">
-                  Explorar proyectos
-                </a>
-              )
-            }
-            <a class="button secondary" href={profile.links.linkedin}
-              >Ver LinkedIn</a
-            >
-            <a class="button secondary" href={profile.links.github}
-              >Ver GitHub</a
-            >
-          </div>
-        </div>
-        <aside class="hero-card" aria-label="Resumen profesional">
-          <div class="signal">
-            <span></span>
-            {profile.status}
-          </div>
-          <p class="mono">// perfil profesional</p>
-          <h2>{profile.shortName}</h2>
-          <p>{profile.summary}</p>
-          <dl>
-            <div><dt>Base</dt><dd>{profile.location}</dd></div>
-            <div><dt>Foco</dt><dd>Blue Team + Producto</dd></div>
-            <div><dt>Experiencia</dt><dd>Entornos críticos</dd></div>
-          </dl>
-        </aside>
-      </section>
-
-      <section class="metrics" aria-label="Indicadores verificables">
-        {
-          profile.metrics.map((metric) => (
-            <div>
-              <>
-                <strong>{metric.value}</strong>
-                <span>{metric.label}</span>
-              </>
+    <div class="page-shell">
+      <main id="contenido">
+        <section id="inicio" class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow">{profile.eyebrow}</p>
+            <h1 id="hero-title">
+              Seguridad que se <span>entiende y funciona.</span>
+            </h1>
+            <p class="hero-positioning">{profile.positioning}</p>
+            <div class="actions">
+              {
+                projects.length > 0 && (
+                  <a class="button primary" href="#proyectos">
+                    Explorar proyectos
+                  </a>
+                )
+              }
+              <a class="button secondary" href={profile.links.linkedin}
+                >Ver LinkedIn</a
+              >
+              <a class="button secondary" href={profile.links.github}
+                >Ver GitHub</a
+              >
             </div>
-          ))
-        }
-      </section>
+          </div>
+          <aside class="hero-card" aria-label="Resumen profesional">
+            <div class="signal">
+              <span></span>
+              {profile.status}
+            </div>
+            <p class="mono">// perfil profesional</p>
+            <h2>{profile.shortName}</h2>
+            <p>{profile.summary}</p>
+            <dl>
+              <div><dt>Base</dt><dd>{profile.location}</dd></div>
+              <div><dt>Foco</dt><dd>Blue Team + Producto</dd></div>
+              <div><dt>Experiencia</dt><dd>Entornos críticos</dd></div>
+            </dl>
+          </aside>
+        </section>
 
-      <section id="perfil" class="section-block">
-        <div class="section-heading">
-          <p class="eyebrow">Perfil</p>
-          <h2>Cuatro capacidades.<br />Una mirada integral.</h2>
-          <p>
-            La seguridad no termina en una alerta: también necesita personas
-            preparadas y herramientas que permitan actuar.
-          </p>
-        </div>
-        <div class="specialty-grid">
+        <section class="metrics" aria-label="Indicadores verificables">
           {
-            visibleSpecialties.map((item) => (
-              <article class="specialty-card">
-                <span class="card-number">{item.number}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul>
-                  {item.tags.map((tag) => (
-                    <li>{tag}</li>
-                  ))}
-                </ul>
-              </article>
-            ))
-          }
-        </div>
-      </section>
-
-      <section id="experiencia" class="section-block experience">
-        <div class="section-heading">
-          <p class="eyebrow">Trayectoria</p>
-          <h2>Experiencia construida desde la operación.</h2>
-          <p>
-            Desde 2021, las responsabilidades de concientización se desarrollan
-            de manera concurrente con las funciones de análisis y respuesta a
-            incidentes iniciadas en 2019.
-          </p>
-        </div>
-        <div class="timeline">
-          {
-            visibleExperience.map((item) => (
-              <article>
-                <time>{item.period}</time>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))
-          }
-        </div>
-      </section>
-
-      {
-        projects.length > 0 && (
-          <section id="proyectos" class="section-block projects">
-            <div class="section-heading horizontal">
+            profile.metrics.map((metric) => (
               <div>
                 <>
-                  <p class="eyebrow">Casos de estudio</p>
-                  <h2>
-                    De la necesidad
-                    <br />a la solución.
-                  </h2>
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label}</span>
                 </>
               </div>
-              <p>
-                Casos públicos y sanitizados que explican responsabilidades y
-                decisiones sin exponer información operacional.
-              </p>
-            </div>
-            <div class="project-list">
-              {projects.map((project, index) => (
-                <a
-                  class:list={[
-                    'project-card',
-                    { 'project-card--nfcores': project.id === 'nfcores' },
-                  ]}
-                  href={`/proyectos/${project.id}/`}
-                >
-                  <span class="project-index">0{index + 1}</span>
-                  <div>
-                    <>
-                      <p>{project.data.eyebrow}</p>
-                      <h3>{project.data.title}</h3>
-                      <span>{project.data.summary}</span>
-                    </>
-                  </div>
-                  <strong aria-hidden="true">↗</strong>
-                </a>
-              ))}
-            </div>
-          </section>
-        )
-      }
-
-      <section class="section-block stack">
-        <div class="section-heading">
-          <p class="eyebrow">Herramientas</p><h2>Tecnología con propósito.</h2>
-        </div>
-        <div class="stack-grid">
-          {
-            visibleTechnologies.map((group) => (
-              <article>
-                <>
-                  <h3>{group.title}</h3>
-                  <ul>
-                    {group.items.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                </>
-              </article>
             ))
           }
-        </div>
-      </section>
+        </section>
 
-      {
-        showCredentials && (
-          <section id="credenciales" class="section-block credentials">
-            <div class="section-heading">
-              <p class="eyebrow">Formación verificable</p>
-              <h2>Aprendizaje con estado visible.</h2>
-              <p>
-                Esta sección solo aparece cuando cada registro supera las
-                puertas de visibilidad, validación y revisión correspondientes.
-              </p>
-            </div>
-            <div class="credential-grid">
-              {visibleEducation.map((item) => (
-                <article>
-                  <p class="credential-kind">Educación</p>
-                  <h3>{item.program}</h3>
-                  <p>{item.institution}</p>
-                  <span>{item.period}</span>
-                </article>
-              ))}
-              {visibleCertifications.map((item) => (
-                <article>
-                  <p class="credential-kind">Certificación</p>
-                  <h3>{item.name}</h3>
-                  <p>{item.issuer}</p>
-                  <span>{item.year}</span>
-                </article>
-              ))}
-              {visibleTraining.map((item) => (
-                <article>
-                  <p class="credential-kind">Formación en curso</p>
-                  <h3>{item.name}</h3>
-                  <p>{item.issuer}</p>
-                  <span>{item.year} · En curso</span>
-                </article>
-              ))}
-            </div>
-          </section>
-        )
-      }
-
-      {
-        contactVisible && (
-          <section id="contacto" class="contact">
-            <p class="eyebrow">Contacto</p>
-            <h2>Conversemos sobre el próximo desafío.</h2>
+        <section id="perfil" class="section-block">
+          <div class="section-heading">
+            <p class="eyebrow">Perfil</p>
+            <h2>Cuatro capacidades.<br />Una mirada integral.</h2>
             <p>
-              Para oportunidades profesionales, proyectos o colaboraciones
-              tecnológicas.
+              La seguridad no termina en una alerta: también necesita personas
+              preparadas y herramientas que permitan actuar.
             </p>
-            <a class="button light" href={`mailto:${contact.email}`}>
-              Escribir por correo
-            </a>
-            <div class="social-links">
-              <a href={contact.links.linkedin}>LinkedIn</a>
-              <a href={contact.links.github}>GitHub</a>
-              <a href={contact.links.credly}>Credly</a>
-            </div>
-          </section>
-        )
-      }
-    </main>
-    <footer>
-      <span>© {new Date().getFullYear()} {profile.name}</span><span
-        >Construido con Astro · Sin analítica</span
-      >
-    </footer>
+          </div>
+          <div class="specialty-grid">
+            {
+              visibleSpecialties.map((item) => (
+                <article class="specialty-card">
+                  <span class="card-number">{item.number}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <ul>
+                    {item.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section id="experiencia" class="section-block experience">
+          <div class="section-heading">
+            <p class="eyebrow">Trayectoria</p>
+            <h2>Experiencia construida desde la operación.</h2>
+            <p>
+              Desde 2021, las responsabilidades de concientización se
+              desarrollan de manera concurrente con las funciones de análisis y
+              respuesta a incidentes iniciadas en 2019.
+            </p>
+          </div>
+          <div class="timeline">
+            {
+              visibleExperience.map((item) => (
+                <article>
+                  <time>{item.period}</time>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        {
+          projects.length > 0 && (
+            <section id="proyectos" class="section-block projects">
+              <div class="section-heading horizontal">
+                <div>
+                  <>
+                    <p class="eyebrow">Casos de estudio</p>
+                    <h2>
+                      De la necesidad
+                      <br />a la solución.
+                    </h2>
+                  </>
+                </div>
+                <p>
+                  Casos públicos y sanitizados que explican responsabilidades y
+                  decisiones sin exponer información operacional.
+                </p>
+              </div>
+              <div class="project-list">
+                {projects.map((project, index) => (
+                  <a
+                    class:list={[
+                      'project-card',
+                      { 'project-card--nfcores': project.id === 'nfcores' },
+                    ]}
+                    href={`/proyectos/${project.id}/`}
+                  >
+                    <span class="project-index">0{index + 1}</span>
+                    <div>
+                      <>
+                        <p>{project.data.eyebrow}</p>
+                        <h3>{project.data.title}</h3>
+                        <span>{project.data.summary}</span>
+                      </>
+                    </div>
+                    <strong aria-hidden="true">↗</strong>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <section id="herramientas" class="section-block stack">
+          <div class="section-heading">
+            <p class="eyebrow">Herramientas</p><h2>
+              Tecnología con propósito.
+            </h2>
+          </div>
+          <div class="stack-grid">
+            {
+              visibleTechnologies.map((group) => (
+                <article>
+                  <>
+                    <h3>{group.title}</h3>
+                    <ul>
+                      {group.items.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        {
+          showCredentials && (
+            <section id="credenciales" class="section-block credentials">
+              <div class="section-heading">
+                <p class="eyebrow">Formación verificable</p>
+                <h2>Aprendizaje con estado visible.</h2>
+                <p>
+                  Esta sección solo aparece cuando cada registro supera las
+                  puertas de visibilidad, validación y revisión
+                  correspondientes.
+                </p>
+              </div>
+              {visibleEducation.length > 0 && (
+                <div class="credential-group">
+                  <h3 class="credential-group-title">Educación</h3>
+                  <div class="credential-grid">
+                    {visibleEducation.map((item) => (
+                      <article>
+                        <p class="credential-kind">Educación</p>
+                        <h4>{item.program}</h4>
+                        <p>{item.institution}</p>
+                        <span>{item.period}</span>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {visibleCertifications.length > 0 && (
+                <div class="credential-group">
+                  <h3 class="credential-group-title">Certificaciones</h3>
+                  <div class="credential-grid">
+                    {visibleCertifications.map((item) => (
+                      <article>
+                        <p class="credential-kind">Certificación</p>
+                        <h4>{item.name}</h4>
+                        <p>{item.issuer}</p>
+                        <span>{item.year}</span>
+                        {item.verificationUrl && (
+                          <a
+                            class="credential-verify"
+                            href={item.verificationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Verificar ↗
+                          </a>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {visibleTraining.length > 0 && (
+                <div class="credential-group">
+                  <h3 class="credential-group-title">
+                    Formación complementaria
+                  </h3>
+                  <div class="credential-grid">
+                    {visibleTraining.map((item) => (
+                      <article>
+                        <p class="credential-kind">
+                          {item.review.status === 'in-progress'
+                            ? 'En curso'
+                            : 'Formación complementaria'}
+                        </p>
+                        <h4>{item.name}</h4>
+                        <p>{item.issuer}</p>
+                        <span>{item.year}</span>
+                        {item.verificationUrl && (
+                          <a
+                            class="credential-verify"
+                            href={item.verificationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Verificar ↗
+                          </a>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+          )
+        }
+
+        {
+          contactVisible && (
+            <section id="contacto" class="contact">
+              <p class="eyebrow">Contacto</p>
+              <h2>Conversemos sobre el próximo desafío.</h2>
+              <p>
+                Para oportunidades profesionales, proyectos o colaboraciones
+                tecnológicas.
+              </p>
+              <a class="button light" href={`mailto:${contact.email}`}>
+                Escribir por correo
+              </a>
+              <div class="social-links">
+                <a href={contact.links.linkedin}>LinkedIn</a>
+                <a href={contact.links.github}>GitHub</a>
+                <a href={contact.links.credly}>Credly</a>
+              </div>
+            </section>
+          )
+        }
+      </main>
+      <footer>
+        <span>© {new Date().getFullYear()} {profile.name}</span><span
+          >Construido con Astro · Sin analítica</span
+        >
+      </footer>
+    </div>
   </div>
 </BaseLayout>

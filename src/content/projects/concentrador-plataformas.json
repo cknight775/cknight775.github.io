@@ -3,6 +3,8 @@
   "eyebrow": "Caso institucional sanitizado",
   "title": "Concentrador de Plataformas",
   "summary": "Portal que ordena el acceso a aplicaciones y servicios, con gestión de contenidos e identidad visual desde un panel administrativo.",
+  "period": "2021",
+  "status": "completed",
   "context": "La solución respondió a una necesidad de organización y acceso dentro de un entorno institucional crítico.",
   "role": "Diseño y desarrollo completo, evolucionando desde un sitio estático hacia una aplicación full-stack con persistencia de datos.",
   "approach": [
@@ -18,6 +20,7 @@
     "Prisma ORM",
     "PostgreSQL"
   ],
+  "outcome": "Solución entregada y en uso institucional; no se publican métricas ni resultados cuantitativos por política OPSEC.",
   "notice": "Este caso no representa la arquitectura real ni expone servicios, accesos o controles institucionales.",
   "review": {
     "validation": "draft",
