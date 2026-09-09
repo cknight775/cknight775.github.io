@@ -3,8 +3,3 @@ node_modules/
 .npm-cache/
 .astro/
 dist/
-
-# Plantilla heredada: se eliminará cuando la reconstrucción reemplace el sitio
-assets/
-forms/
-index.html

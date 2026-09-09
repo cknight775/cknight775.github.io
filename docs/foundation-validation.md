@@ -1,5 +1,11 @@
 # Evidencia de validación de Foundation
 
+> **Documento histórico.** Corresponde a la revisión inicial del issue #2,
+> antes del sidebar (`docs/ux/sidebar-navigation.md`) y de las secciones
+> completas de la PR #14. La mención al "desplazamiento horizontal" de la
+> navegación se refiere a una versión ya reemplazada por el menú móvil
+> compacto y luego por la barra lateral; no describe el estado actual.
+
 Este documento reúne la evidencia reproducible solicitada para la revisión final
 del issue #2. La PR debe permanecer como borrador y no autoriza merge ni despliegue.
 

@@ -1,5 +1,10 @@
 # Evidencia de página principal — issue #5
 
+> **Documento histórico.** Las capturas referenciadas corresponden a la
+> cabecera horizontal (`Header.astro`), retirada en favor de la barra
+> lateral documentada en `docs/ux/sidebar-navigation.md`. El comportamiento
+> descrito sobre visibilidad de secciones y contenido sigue vigente.
+
 Implementación para revisión del Consejo. No autoriza merge, despliegue ni
 publicación.
 

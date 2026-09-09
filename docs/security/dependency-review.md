@@ -45,3 +45,54 @@ siguiente:
 No se requiere excepción temporal porque existe una versión correctiva
 compatible. Esta decisión deberá revisarse si Astro modifica su rango aceptado o
 si un advisory nuevo afecta a `sharp 0.35.3`.
+
+## Actualización — 9 de septiembre de 2026
+
+Revisión realizada el 9 de septiembre de 2026, motivada por dos advisories
+publicados el 8 de septiembre de 2026.
+
+### GHSA-26w7-cxv4-gfx2 (crítico)
+
+- Paquete afectado: `astro`.
+- Descripción: ejecución remota de código a través de la optimización de
+  imágenes AVIF.
+- Rango vulnerable: `astro < 7.2.8`.
+- Versión encontrada: `astro 7.2.4` (vulnerable).
+- Versión correctiva seleccionada: `astro 7.3.2`.
+- Alcance en este proyecto: el portafolio no utiliza `astro:assets`, el
+  componente `<Image />` ni el endpoint `/_image`; ninguna ruta procesa
+  imágenes subidas por visitantes. La explotabilidad en este proyecto era
+  nula, pero la dependencia vulnerable estaba instalada.
+
+### GHSA-rgj7-g3m4-5g8c (alto)
+
+- Paquete afectado: `sharp` (dependencia transitiva de `astro`).
+- Descripción: vulnerabilidades heredadas de `libheif`
+  (`GHSA-g89c-p67h-r497` y `GHSA-2jg2-4ch7-h545`).
+- Rango vulnerable: `sharp < 0.35.4`.
+- Versión encontrada: `sharp 0.35.3` (vulnerable).
+- Versión correctiva seleccionada: `sharp 0.35.4`.
+- Alcance en este proyecto: igual que en la revisión anterior de
+  `GHSA-f88m-g3jw-g9cj` — `sharp` no procesa imágenes en producción ni recibe
+  entradas de visitantes.
+
+### Nota sobre GHSA-376h-93r7-7g6f (medio)
+
+Este advisory (bypass de autorización al eliminar el `base` configurado)
+afecta a `astro <= 7.2.3`. La versión ya instalada antes de esta actualización
+(`7.2.4`) ya incluía la corrección; no fue un motivo de esta actualización,
+pero queda documentado por completitud al revisar el mismo rango de versiones.
+
+### Remediación
+
+Se actualizó `astro` a `7.3.2` y se fijó `sharp` a `0.35.4` mediante
+`overrides` en `package.json`, regenerando el lockfile con `npm install`. No
+se ejecutó `npm audit fix` ni `npm audit fix --force`.
+
+### Validación posterior
+
+- `npm ls astro` resuelve `7.3.2`; `npm ls sharp` resuelve `0.35.4`.
+- `npm audit --omit=dev --audit-level=high` finaliza sin vulnerabilidades.
+- `npm audit --audit-level=high` (incluyendo dependencias de desarrollo)
+  finaliza sin vulnerabilidades.
+- `astro check` y `astro build` continúan funcionando sin errores.

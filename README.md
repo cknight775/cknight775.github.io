@@ -5,9 +5,12 @@ Reconstrucción del portafolio profesional con Astro y TypeScript. El sitio est�
 ## Desarrollo local
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
+
+`npm ci` instala exactamente lo fijado en `package-lock.json`; úsalo también en
+lugar de `npm install` al preparar un entorno de revisión o CI.
 
 ## Validación
 
@@ -15,29 +18,42 @@ npm run dev
 npm run format
 npm run check:secrets
 npm run build
+npm run check:production-content
+npm audit --omit=dev --audit-level=high
 ```
 
-## Alcance de Astro y TypeScript
+## Vista previa con contenido en `preview`
 
-- `tsconfig.json` limita el análisis a `.astro/types.d.ts`, `astro.config.mjs` y
-  `src/**/*`, que constituyen la nueva aplicación Astro.
-- `assets/**`, `forms/**`, `index.html`, `dist/**` y `node_modules/**` quedan
-  excluidos. Los tres primeros pertenecen al sitio heredado que debe conservarse
-  mientras la PR permanezca en borrador; se retirarán de esta excepción cuando la
-  reconstrucción reemplace formalmente al sitio antiguo.
-- Esta exclusión solo evita diagnósticos ajenos a Foundation. No incorpora ni
-  publica código legado en la aplicación Astro.
+Los casos y credenciales en estado `preview` (Portal CSIRT, Concentrador de
+Plataformas, NFCores, educación, certificaciones y formación complementaria)
+no se generan en el build normal. Para revisarlos localmente:
 
-## Alcance temporal de Prettier
+```bash
+CONTENT_PREVIEW=true npm run build
+CONTENT_PREVIEW=true npm run dev
+```
 
-- `.prettierignore` excluye dependencias y artefactos generados: `node_modules/`,
-  `.npm-cache/`, `.astro/` y `dist/`.
-- También excluye temporalmente `assets/`, `forms/` e `index.html`, que pertenecen
-  a la plantilla heredada. Estas rutas se eliminarán cuando la reconstrucción sea
-  aprobada para reemplazar el sitio actual; hasta entonces se conservan para no
-  modificar el comportamiento de producción.
-- Todo archivo nuevo de Astro, TypeScript, CSS, configuración y documentación sí
-  queda sujeto a `npm run format`.
+Este modo es exclusivamente para revisión del Consejo y del propietario; no se
+usa en CI de producción ni en el despliegue de GitHub Pages
+(`.github/workflows/deploy.yml` no define `CONTENT_PREVIEW`, por lo que
+permanece deshabilitado).
+
+## Astro y TypeScript
+
+`tsconfig.json` analiza toda la aplicación Astro (`src/**/*`), sin
+excepciones para plantillas heredadas: el sitio estático anterior
+(`index.html`, `assets/`, `forms/`) fue retirado del repositorio.
+
+## Despliegue en GitHub Pages
+
+`.github/workflows/deploy.yml` compila el sitio y lo publica en GitHub Pages
+únicamente ante un `push` a `main` ya aprobado (o `workflow_dispatch` manual).
+No se ejecuta en pull requests; `.github/workflows/validate.yml` sigue siendo
+la única puerta de calidad para las PR. El despliegue usa el `environment`
+`github-pages`, permisos mínimos (`contents: read` en el job de build;
+`pages: write` e `id-token: write` solo en el job de despliegue) y
+`concurrency` para evitar despliegues simultáneos. Todas las Actions están
+fijadas por SHA de commit.
 
 ## Seguridad de dependencias
 

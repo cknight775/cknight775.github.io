@@ -1,5 +1,11 @@
 # Evidencia de implementación UX
 
+> **Documento histórico.** El "menú móvil" descrito aquí pertenece a la
+> cabecera horizontal (`Header.astro`), retirada en favor de la barra
+> lateral documentada en `docs/ux/sidebar-navigation.md`. La tabla de
+> contraste de texto/fondo principal sigue vigente porque los tokens de
+> color no cambiaron.
+
 Implementación conceptual autorizada para revisión de los issues #3 y #15. No
 constituye autorización de publicación.
 

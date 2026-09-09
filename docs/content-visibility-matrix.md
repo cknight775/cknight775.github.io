@@ -29,3 +29,23 @@ también omiten anclas a secciones ausentes.
 El script `scripts/verify-production-content.mjs` revisa el HTML y sitemap
 generados. Bloquea títulos y slugs no públicos de Content Collections y los
 marcadores de educación, credenciales y formación complementaria.
+
+## Actualización — PR #14 (Track B)
+
+- El esquema de proyectos se extendió con `period`, `status`, `outcome`,
+  `publicLinks` (opcional) y `evidence` (opcional, `alt` obligatorio). Estos
+  campos son descriptivos y no alteran las puertas de `review`; los tres
+  casos existentes mantienen exactamente los mismos estados de
+  `validation`/`visibility`/`opsec`/`institutionalAuthorization` que en la
+  tabla anterior.
+- Las credenciales (certificaciones y formación complementaria) admiten un
+  `verificationUrl` opcional; no se agregó a educación ni se publican
+  números de certificado.
+- La barra lateral (`docs/ux/sidebar-navigation.md`) reemplaza la cabecera
+  horizontal. Los anclajes `#inicio` y `#herramientas` se agregaron a las
+  secciones correspondientes; la lógica de omitir enlaces a secciones sin
+  contenido elegible (proyectos, credenciales) no cambió.
+- NFCores permanece en `preview`/`draft`: no se cuenta con catálogo ni
+  enlaces públicos verificados todavía, por lo que no se promovió a
+  `public`/`approved` en esta entrega (ver "Decisiones pendientes del
+  propietario" en la entrega de la PR).

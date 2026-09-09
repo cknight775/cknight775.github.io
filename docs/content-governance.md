@@ -39,3 +39,26 @@ El contacto excluye explícitamente teléfono y dirección física.
 
 La estructura reserva `locale: es` sin publicar traducciones ni contenido en
 inglés.
+
+## Revisión OPSEC de experiencia institucional
+
+`src/data/profile.ts` incluye dos responsabilidades institucionales
+concurrentes marcadas `opsec: 'not-required'`: "Jefe de Concientización en
+Ciberseguridad" (2021—actualidad) y "Analista de Amenazas y Respuesta a
+Incidentes" (2019—actualidad). Ambas se revisaron explícitamente para esta
+entrega.
+
+Se mantiene `not-required` porque ninguna de las dos entradas nombra la
+institución, la unidad, herramientas operacionales, topologías, métricas
+sensibles ni activos internos: describen únicamente un cargo genérico
+("Institución Pública / Sector Defensa" en el currículum interno, omitido en
+la página pública), el tamaño de un equipo y el tipo de función (monitoreo,
+correlación, respuesta). Este nivel de generalidad es equivalente al ya
+aceptado para el resto del perfil público y no requiere el mismo tratamiento
+que los casos de estudio (Portal CSIRT, Concentrador de Plataformas), que sí
+describen arquitectura y decisiones de producto específicas de una
+institución.
+
+Si en una futura edición estas entradas incorporan el nombre de la
+institución, unidades, sistemas o cualquier detalle operacional, deben
+pasar a `opsec: 'pending'` antes de publicarse.
