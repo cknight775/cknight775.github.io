@@ -56,7 +56,12 @@ const showCredentials =
     />
     <div class="page-shell">
       <main id="contenido">
-        <section id="inicio" class="hero" aria-labelledby="hero-title">
+        <section
+          id="inicio"
+          class="hero"
+          aria-labelledby="hero-title"
+          tabindex="-1"
+        >
           <div class="hero-copy">
             <p class="eyebrow">{profile.eyebrow}</p>
             <h1 id="hero-title">
@@ -108,7 +113,7 @@ const showCredentials =
           }
         </section>
 
-        <section id="perfil" class="section-block">
+        <section id="perfil" class="section-block" tabindex="-1">
           <div class="section-heading">
             <p class="eyebrow">Perfil</p>
             <h2>Cuatro capacidades.<br />Una mirada integral.</h2>
@@ -135,7 +140,11 @@ const showCredentials =
           </div>
         </section>
 
-        <section id="experiencia" class="section-block experience">
+        <section
+          id="experiencia"
+          class="section-block experience"
+          tabindex="-1"
+        >
           <div class="section-heading">
             <p class="eyebrow">Trayectoria</p>
             <h2>Experiencia construida desde la operación.</h2>
@@ -162,7 +171,11 @@ const showCredentials =
 
         {
           projects.length > 0 && (
-            <section id="proyectos" class="section-block projects">
+            <section
+              id="proyectos"
+              class="section-block projects"
+              tabindex="-1"
+            >
               <div class="section-heading horizontal">
                 <div>
                   <>
@@ -203,7 +216,7 @@ const showCredentials =
           )
         }
 
-        <section id="herramientas" class="section-block stack">
+        <section id="herramientas" class="section-block stack" tabindex="-1">
           <div class="section-heading">
             <p class="eyebrow">Herramientas</p><h2>
               Tecnología con propósito.
@@ -229,7 +242,11 @@ const showCredentials =
 
         {
           showCredentials && (
-            <section id="credenciales" class="section-block credentials">
+            <section
+              id="credenciales"
+              class="section-block credentials"
+              tabindex="-1"
+            >
               <div class="section-heading">
                 <p class="eyebrow">Formación verificable</p>
                 <h2>Aprendizaje con estado visible.</h2>
@@ -316,15 +333,15 @@ const showCredentials =
 
         {
           contactVisible && (
-            <section id="contacto" class="contact">
+            <section id="contacto" class="contact" tabindex="-1">
               <p class="eyebrow">Contacto</p>
               <h2>Conversemos sobre el próximo desafío.</h2>
               <p>
                 Para oportunidades profesionales, proyectos o colaboraciones
                 tecnológicas.
               </p>
-              <a class="button light" href={`mailto:${contact.email}`}>
-                Escribir por correo
+              <a class="button light" href={contact.links.linkedin}>
+                Escribir por LinkedIn
               </a>
               <div class="social-links">
                 <a href={contact.links.linkedin}>LinkedIn</a>

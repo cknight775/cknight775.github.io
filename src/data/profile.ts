@@ -29,7 +29,6 @@ export const profile = profileSchema.parse({
   summary:
     'Transformo necesidades complejas de seguridad en operaciones, contenidos y productos digitales claros, seguros y mantenibles.',
   location: 'Santiago, Chile',
-  email: 'c.c.guerrero107@gmail.com',
   links: {
     github: 'https://github.com/cknight775',
     linkedin:
@@ -152,7 +151,7 @@ export const certifications = [
       institutionalAuthorization: 'not-required',
       sanitized: true,
       verifiedLinks: [],
-      lastReviewed: '2026-08-21',
+      lastReviewed: '2026-09-10',
     },
   },
   {
@@ -167,7 +166,7 @@ export const certifications = [
       institutionalAuthorization: 'not-required',
       sanitized: true,
       verifiedLinks: [],
-      lastReviewed: '2026-08-21',
+      lastReviewed: '2026-09-10',
     },
   },
 ].map((item) => credentialSchema.parse(item));
@@ -191,7 +190,6 @@ export const complementaryTraining = [
 ].map((item) => trainingSchema.parse(item));
 
 export const contact = contactSchema.parse({
-  email: profile.email,
   links: profile.links,
   excludes: ['phone', 'physicalAddress'],
   review: {

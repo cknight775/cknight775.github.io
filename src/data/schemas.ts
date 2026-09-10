@@ -14,7 +14,6 @@ export const profileSchema = z.object({
   positioning: z.string().min(1),
   summary: z.string().min(1),
   location: z.string().min(1),
-  email: z.email(),
   links: linkSchema,
   metrics: z.array(
     z.object({ value: z.string().min(1), label: z.string().min(1) }),
@@ -67,7 +66,6 @@ export const technologySchema = z.object({
 });
 
 export const contactSchema = z.object({
-  email: z.email(),
   links: linkSchema,
   excludes: z.array(z.enum(['phone', 'physicalAddress'])),
   review: reviewSchema,

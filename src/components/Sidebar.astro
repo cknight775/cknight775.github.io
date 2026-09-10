@@ -83,6 +83,8 @@ const ICONS = {
   const toggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
   const scrim = document.querySelector<HTMLElement>('[data-scrim]');
   const nav = document.querySelector<HTMLElement>('#primary-navigation');
+  const main = document.querySelector<HTMLElement>('.page-shell');
+  const skipLink = document.querySelector<HTMLElement>('.skip-link');
   const links = nav?.querySelectorAll<HTMLAnchorElement>('a[data-nav-section]');
   const mobile = window.matchMedia('(max-width: 900px)');
 
@@ -93,27 +95,73 @@ const ICONS = {
     sidebar.toggleAttribute('data-open', mobileOpen);
     scrim.hidden = !mobileOpen;
     document.body.classList.toggle('scroll-locked', mobileOpen);
-    if (returnFocus) toggle.focus();
+
+    // On mobile, keep the closed drawer out of the tab order and the
+    // background content (including the skip link, which sits outside
+    // .page-shell) inert while the drawer is open, so Tab/Shift+Tab can't
+    // escape to content behind the modal-like drawer.
+    sidebar.toggleAttribute('inert', mobile.matches && !mobileOpen);
+    main?.toggleAttribute('inert', mobileOpen);
+    skipLink?.toggleAttribute('inert', mobileOpen);
+
+    if (mobileOpen) {
+      links?.[0]?.focus();
+    } else if (returnFocus) {
+      toggle.focus();
+    }
   }
 
   toggle?.addEventListener('click', () => {
     setDrawer(toggle.getAttribute('aria-expanded') !== 'true');
   });
 
-  scrim?.addEventListener('click', () => setDrawer(false));
+  scrim?.addEventListener('click', () => setDrawer(false, true));
 
   nav?.addEventListener('click', (event) => {
-    if (event.target instanceof HTMLAnchorElement && mobile.matches) {
-      setDrawer(false);
+    const link =
+      event.target instanceof Element ? event.target.closest('a') : null;
+    if (!link || !mobile.matches) return;
+
+    const sectionId = link.dataset.navSection;
+    const samePage = link.pathname === window.location.pathname;
+    setDrawer(false);
+
+    // Selecting a section moves focus to it so keyboard/screen-reader users
+    // land where they navigated to; if the target isn't on this page (or
+    // has no anchor), fall back to returning focus to the toggle.
+    if (samePage && sectionId && document.getElementById(sectionId)) {
+      document.getElementById(sectionId)?.focus();
+    } else {
+      toggle?.focus();
     }
   });
 
   document.addEventListener('keydown', (event) => {
-    if (
-      event.key === 'Escape' &&
-      toggle?.getAttribute('aria-expanded') === 'true'
-    ) {
+    const isOpen = toggle?.getAttribute('aria-expanded') === 'true';
+    if (!isOpen) return;
+
+    if (event.key === 'Escape') {
       setDrawer(false, true);
+      return;
+    }
+
+    // Trap Tab/Shift+Tab between the toggle and the last focusable link in
+    // the drawer while it's open, instead of letting focus fall through to
+    // inert content or off the end of the document.
+    if (event.key === 'Tab' && toggle && sidebar) {
+      const focusables = [
+        toggle,
+        ...sidebar.querySelectorAll<HTMLElement>('a'),
+      ];
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
   });
 

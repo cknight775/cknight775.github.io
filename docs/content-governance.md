@@ -33,9 +33,14 @@ continúa como borrador de preview.
 ## Datos profesionales
 
 `src/data/profile.ts` concentra perfil, experiencia, tecnologías, contacto,
-educación y certificaciones. Educación y certificaciones permanecen como listas
-vacías y privadas hasta contar con evidencia verificable; no se infieren datos.
-El contacto excluye explícitamente teléfono y dirección física.
+educación y certificaciones. Educación permanece en `preview` mientras su
+OPSEC esté `pending`. Las certificaciones (Fortinet, SFPC) permanecen en
+`preview`/`verified`: el perfil general de Credly no es evidencia
+individual verificable por insignia, así que no se presentan como públicas
+hasta contar con la URL directa de cada una. El contacto excluye
+explícitamente teléfono, dirección física y correo electrónico: el único
+canal de contacto público es LinkedIn (además de GitHub y Credly como
+enlaces informativos).
 
 La estructura reserva `locale: es` sin publicar traducciones ni contenido en
 inglés.

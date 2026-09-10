@@ -9,7 +9,8 @@ dirección ni otros datos personales innecesarios.
 No se identificaron contradicciones entre el CV y la fuente estructurada respecto
 de:
 
-- identidad profesional, ubicación general y correo;
+- identidad profesional y ubicación general (el correo personal ya no se
+  publica; el único contacto público es LinkedIn);
 - experiencia superior a siete años;
 - responsabilidades concurrentes desde 2019 y 2021;
 - liderazgo de un equipo de cinco personas;
@@ -23,9 +24,11 @@ de:
 
 - La información institucional continúa sanitizada y no replica nombres internos,
   infraestructura, accesos ni controles.
-- Educación y certificaciones tienen visibilidad `preview`; no se muestran en la
-  página hasta aprobar su presentación y, cuando corresponda, comprobar insignias
-  o enlaces públicos.
+- Educación tiene visibilidad `preview`; no se muestra en la página hasta que
+  su OPSEC deje de estar `pending`. Las certificaciones (Fortinet, SFPC)
+  también permanecen en `preview`: solo se publicarán con la URL pública de
+  la insignia individual de cada una, no con el enlace general al perfil de
+  Credly.
 - El curso de Desarrollo Full Stack JavaScript se identifica expresamente como
   `in-progress`.
 - El CV público se preparará en #10 y deberá excluir el teléfono.

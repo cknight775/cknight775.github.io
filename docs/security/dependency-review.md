@@ -31,8 +31,9 @@ dependencia vulnerable sí estaba instalada en CI y en entornos de desarrollo.
 
 ### Remediación
 
-Se fijó explícitamente `sharp 0.35.3` mediante `overrides` en `package.json` y se
-regeneró el lockfile. No se ejecutó `npm audit fix` ni `npm audit fix --force`.
+Se ejecutó `npm audit fix` (sin `--force`) y adicionalmente se fijó
+explícitamente `sharp 0.35.3` mediante `overrides` en `package.json`,
+regenerando el lockfile.
 
 La remediación debe considerarse válida únicamente cuando se cumpla todo lo
 siguiente:
@@ -85,9 +86,9 @@ pero queda documentado por completitud al revisar el mismo rango de versiones.
 
 ### Remediación
 
-Se actualizó `astro` a `7.3.2` y se fijó `sharp` a `0.35.4` mediante
-`overrides` en `package.json`, regenerando el lockfile con `npm install`. No
-se ejecutó `npm audit fix` ni `npm audit fix --force`.
+Se ejecutó `npm audit fix` (sin `--force`), que actualizó `astro` a `7.3.2` y
+fijó `sharp` a `0.35.4` mediante `overrides` en `package.json`, regenerando el
+lockfile.
 
 ### Validación posterior
 

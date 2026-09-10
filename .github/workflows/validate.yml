@@ -36,5 +36,10 @@ jobs:
       - name: Verify production content policy
         run: npm run check:production-content
 
+      - name: Build preview content (review only, never published)
+        run: npm run build
+        env:
+          CONTENT_PREVIEW: 'true'
+
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high

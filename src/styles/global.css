@@ -54,7 +54,10 @@ a {
 .page-shell {
   flex: 1;
   min-width: 0;
-  width: min(calc(100% - 2rem), var(--max));
+  /* flex-basis: 0% (from `flex: 1`) makes a plain `width` a no-op here, so
+     the cap must be expressed as max-width for it to actually constrain
+     and center the column via the auto margins. */
+  max-width: min(calc(100% - 2rem), var(--max));
   margin: auto;
 }
 :focus-visible {
@@ -111,7 +114,7 @@ a {
   padding: 1.5rem 0.5rem;
   background: var(--bg-soft);
   border-right: 1px solid var(--line);
-  z-index: 30;
+  z-index: 40;
 }
 .sidebar-brand {
   display: grid;

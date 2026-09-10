@@ -34,9 +34,13 @@ CONTENT_PREVIEW=true npm run dev
 ```
 
 Este modo es exclusivamente para revisión del Consejo y del propietario; no se
-usa en CI de producción ni en el despliegue de GitHub Pages
-(`.github/workflows/deploy.yml` no define `CONTENT_PREVIEW`, por lo que
-permanece deshabilitado).
+usa en CI de producción ni en el despliegue de GitHub Pages. El job `build` de
+`.github/workflows/deploy.yml` fija explícitamente `CONTENT_PREVIEW: 'false'`,
+por lo que el despliegue siempre compila con el contenido público únicamente.
+`.github/workflows/validate.yml` ejecuta además un build adicional con
+`CONTENT_PREVIEW=true` en cada pull request, solo para verificar que el
+contenido en preview compila; ese resultado nunca se publica ni se sube como
+artefacto.
 
 ## Astro y TypeScript
 
