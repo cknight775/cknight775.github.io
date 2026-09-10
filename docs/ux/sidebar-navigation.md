@@ -117,37 +117,26 @@ sin extensiones (el binario de Playwright no carga ninguna por defecto):
 - `tablet-768x1024.png` — portada en tablet.
 - `mobile-390x844-cerrado.png` — móvil con el drawer cerrado.
 - `mobile-390x844-abierto.png` — móvil con el drawer abierto.
+- `proyectos.png` — sección Proyectos con la tarjeta "Este portafolio".
+- `caso-portafolio-personal.png` — página completa del caso "Este
+  portafolio" (ahora pública en `/proyectos/portafolio-personal/`).
 
-Como Fortinet, SFPC y "Este portafolio" volvieron a `preview` (ver
+Ahora que "Este portafolio" pasó a `public`/`approved` (ver
 [`docs/content-visibility-matrix.md`](../content-visibility-matrix.md)), el
-build de producción actual **no tiene** sección de Proyectos ni de
-Credenciales, ni los elementos de menú correspondientes; las cuatro capturas
-de arriba lo reflejan fielmente (solo Inicio, Perfil, Experiencia,
-Herramientas y Contacto).
-
-Dos capturas adicionales, generadas con `CONTENT_PREVIEW=true` **solo para
-que el Consejo revise contenido que todavía no se publica**, llevan el
-prefijo `PREVIEW-SOLO-` para que no puedan confundirse con evidencia de
-producción:
-
-- `PREVIEW-SOLO-credenciales.png` — cómo se vería la sección de
-  credenciales si Fortinet/SFPC se aprobaran.
-- `PREVIEW-SOLO-caso-portafolio-personal.png` — la página completa del caso
-  "Este portafolio" pendiente de revisión de contenido.
-
-Ninguna de las dos representa el sitio publicado; ese build con
-`CONTENT_PREVIEW=true` se generó, se capturó y se descartó sin subir nada
-a producción (mismo patrón ya usado para la captura de NFCores en
-`docs/ux/implementation-evidence.md`).
+build de producción **sí tiene** sección de Proyectos y el elemento de menú
+correspondiente; las capturas de arriba lo reflejan. Fortinet, SFPC y el
+resto de casos siguen en `preview`, así que Credenciales y "Formación y
+credenciales" siguen ausentes — no hay capturas `PREVIEW-SOLO-*` en esta
+ronda porque no queda contenido pendiente que capturar solo para revisión.
 
 Comprobaciones automatizadas ejecutadas sobre el build de producción real
 (no son capturas, sino aserciones sobre el DOM y la consola):
 
 - **Consola limpia**: cero mensajes `console.error`, `console.warning`,
   `pageerror` o `requestfailed` en ninguna navegación ni interacción,
-  incluida la navegación directa por hash descrita abajo.
+  incluida la navegación directa por hash y por teclado descritas abajo.
 - **Menú de producción correcto**: los enlaces del menú son exactamente
-  Inicio, Perfil, Experiencia, Herramientas y Contacto (sin Proyectos ni
+  Inicio, Perfil, Experiencia, Proyectos, Herramientas y Contacto (sin
   Formación y credenciales).
 - **Drawer cerrado no tabulable**: `<aside data-sidebar>` recibe el atributo
   `inert` mientras está cerrado en móvil.
@@ -160,21 +149,24 @@ Comprobaciones automatizadas ejecutadas sobre el build de producción real
   botón mueve el foco de vuelta al último enlace.
 - **Escape con retorno de foco**: `Escape` cierra el drawer
   (`aria-expanded=false`) y devuelve el foco al botón hamburguesa.
-- **Foco al seleccionar sección**: al activar el enlace "Perfil" en móvil,
-  el drawer se cierra y el foco queda en `#perfil`.
+- **Navegación por teclado a Proyectos, en móvil**: con el drawer abierto,
+  se recorrió la navegación con `Tab` hasta el enlace "Proyectos" y se
+  activó con `Enter`; el drawer se cerró y el foco quedó en `#proyectos`.
+- **Navegación por teclado a Proyectos, en escritorio**: partiendo del
+  monograma "CC", se recorrió con `Tab` hasta "Proyectos" y se activó con
+  `Enter`; la URL resultante fue `.../#proyectos`.
 - **Navegación directa por hash**: se navegó directamente a `/#inicio`,
-  `/#perfil`, `/#experiencia`, `/#herramientas` y `/#contacto` (las cinco
-  secciones presentes en este build); en los cinco casos la sección
-  correspondiente queda dentro del viewport tras la carga, sin errores de
-  consola. También se confirmó que `#proyectos` y `#credenciales` no
-  existen en el DOM de este build.
+  `/#perfil`, `/#experiencia`, `/#proyectos`, `/#herramientas` y
+  `/#contacto` (las seis secciones presentes en este build); en los seis
+  casos la sección correspondiente queda dentro del viewport tras la carga,
+  sin errores de consola. También se confirmó que `#credenciales` no existe
+  en el DOM de este build.
 
-Los scripts usados (`capture-evidence-prod.mjs` y
-`capture-preview-review.mjs`) no forman parte del repositorio: son
-herramientas de verificación puntual para esta revisión, no artefactos de
-producción. Si se desea repetirlos, requieren Playwright y las bibliotecas
-de Chromium indicadas arriba; ninguna de las dos cosas se agregó como
-dependencia del proyecto.
+El script usado (`capture-evidence-round3.mjs`) no forma parte del
+repositorio: es una herramienta de verificación puntual para esta revisión,
+no un artefacto de producción. Si se desea repetirlo, requiere Playwright y
+las bibliotecas de Chromium indicadas arriba; ninguna de las dos cosas se
+agregó como dependencia del proyecto.
 
 Puntos que siguen requiriendo verificación visual humana antes de aprobar
 esta parte de la PR (las aserciones automatizadas no sustituyen el juicio

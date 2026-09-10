@@ -8,28 +8,33 @@
   "context": "El sitio anterior mezclaba HTML estático, un formulario PHP y datos personales sin un proceso claro de revisión. El objetivo fue reconstruirlo como un proyecto público y auditable: cada dato profesional pasa por puertas explícitas de validación, visibilidad, OPSEC y autorización institucional antes de aparecer en producción.",
   "role": "Diseño, desarrollo y gobierno de contenido de extremo a extremo: arquitectura del sitio, esquemas de datos con Zod, accesibilidad de la navegación y automatización de CI.",
   "approach": [
-    "Colecciones de contenido tipadas (Astro Content Collections y Zod) con un esquema de revisión (validation, visibility, opsec, institutionalAuthorization, sanitized) que bloquea en build cualquier combinación insegura.",
-    "Un script de verificación (check:production-content) que inspecciona el HTML generado y falla si se filtra contenido no público.",
+    "Esquemas de revisión que rechazan durante el build entradas marcadas como públicas cuando no cumplen las reglas declaradas.",
+    "Verificación del HTML generado mediante títulos y slugs de proyectos no públicos y marcadores registrados de formación y credenciales.",
     "Barra lateral con drawer accesible en móvil: navegación inerte mientras el menú está cerrado, contenido de fondo inerte mientras está abierto y retorno de foco al cerrar.",
     "CI que ejecuta formato, escaneo de secretos, build, verificación de contenido y auditoría de dependencias en cada pull request; el despliegue usa Actions fijadas por SHA y permisos mínimos."
   ],
   "technologies": ["Astro", "TypeScript", "Zod", "GitHub Actions"],
-  "outcome": "Sitio en producción en GitHub Pages, con el repositorio y su historial de decisiones disponibles públicamente.",
+  "outcome": "Reconstrucción estática validada por CI y preparada para reemplazar el sitio anterior en GitHub Pages; el despliegue permanece pendiente de aprobación.",
   "publicLinks": [
     {
       "label": "Repositorio en GitHub",
       "url": "https://github.com/cknight775/cknight775.github.io"
     }
   ],
-  "notice": "El repositorio es público y no contiene información institucional; los casos de estudio institucionales se mantienen aparte, sujetos a revisión OPSEC.",
+  "notice": "El repositorio es público e incluye borradores institucionales sanitizados en preview, sin secretos, accesos, topologías ni detalles operacionales. Esos casos no se generan en producción sin aprobación.",
   "review": {
-    "validation": "draft",
-    "visibility": "preview",
-    "status": "draft",
+    "validation": "approved",
+    "visibility": "public",
+    "status": "active",
     "opsec": "not-required",
     "institutionalAuthorization": "not-required",
     "sanitized": true,
-    "verifiedLinks": [],
+    "verifiedLinks": [
+      {
+        "label": "Repositorio en GitHub",
+        "url": "https://github.com/cknight775/cknight775.github.io"
+      }
+    ],
     "lastReviewed": "2026-09-10"
   }
 }

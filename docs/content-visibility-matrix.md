@@ -3,24 +3,24 @@
 Estado correspondiente al issue #5. La matriz describe qué puede incluir el build
 normal y qué requiere el modo explícito `CONTENT_PREVIEW=true`.
 
-| Grupo                    | Contenido                                                            | Visibilidad | Validación | OPSEC          | Autorización   | Build normal |
-| ------------------------ | -------------------------------------------------------------------- | ----------- | ---------- | -------------- | -------------- | ------------ |
-| Perfil                   | Identidad, posicionamiento y métricas aprobadas                      | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Trayectoria              | Tres responsabilidades profesionales sanitizadas                     | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Especialidades           | Cuatro capacidades profesionales                                     | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Tecnologías              | Cuatro grupos sin porcentajes                                        | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Contacto                 | LinkedIn, GitHub y Credly (sin correo)                               | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Casos                    | Este portafolio (concepto aceptado, contenido pendiente de revisión) | `preview`   | `draft`    | `not-required` | `not-required` | No           |
-| Casos                    | Portal CSIRT                                                         | `preview`   | `draft`    | `pending`      | `pending`      | No           |
-| Casos                    | Concentrador de Plataformas                                          | `preview`   | `draft`    | `pending`      | `pending`      | No           |
-| Casos                    | NFCores                                                              | `preview`   | `draft`    | `not-required` | `not-required` | No           |
-| Educación                | Ingeniería en Ciberseguridad                                         | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Educación                | Diplomado en Gestión de Ciberseguridad                               | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Educación                | Técnico de Nivel Superior en Telecomunicaciones                      | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Credencial               | Fortinet Certified Fundamentals (sin URL de insignia individual)     | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Credencial               | SFPC (sin URL de insignia individual)                                | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Formación complementaria | Desarrollo Full Stack JavaScript, en curso                           | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Privado                  | Ninguna entrada activa                                               | `private`   | —          | —              | —              | No           |
+| Grupo                    | Contenido                                                        | Visibilidad | Validación | OPSEC          | Autorización   | Build normal |
+| ------------------------ | ---------------------------------------------------------------- | ----------- | ---------- | -------------- | -------------- | ------------ |
+| Perfil                   | Identidad, posicionamiento y métricas aprobadas                  | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Trayectoria              | Tres responsabilidades profesionales sanitizadas                 | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Especialidades           | Cuatro capacidades profesionales                                 | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Tecnologías              | Cuatro grupos sin porcentajes                                    | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Contacto                 | LinkedIn, GitHub y Credly (sin correo)                           | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Casos                    | Este portafolio                                                  | `public`    | `approved` | `not-required` | `not-required` | Sí           |
+| Casos                    | Portal CSIRT                                                     | `preview`   | `draft`    | `pending`      | `pending`      | No           |
+| Casos                    | Concentrador de Plataformas                                      | `preview`   | `draft`    | `pending`      | `pending`      | No           |
+| Casos                    | NFCores                                                          | `preview`   | `draft`    | `not-required` | `not-required` | No           |
+| Educación                | Ingeniería en Ciberseguridad                                     | `preview`   | `verified` | `pending`      | `not-required` | No           |
+| Educación                | Diplomado en Gestión de Ciberseguridad                           | `preview`   | `verified` | `pending`      | `not-required` | No           |
+| Educación                | Técnico de Nivel Superior en Telecomunicaciones                  | `preview`   | `verified` | `pending`      | `not-required` | No           |
+| Credencial               | Fortinet Certified Fundamentals (sin URL de insignia individual) | `preview`   | `verified` | `not-required` | `not-required` | No           |
+| Credencial               | SFPC (sin URL de insignia individual)                            | `preview`   | `verified` | `not-required` | `not-required` | No           |
+| Formación complementaria | Desarrollo Full Stack JavaScript, en curso                       | `preview`   | `verified` | `not-required` | `not-required` | No           |
+| Privado                  | Ninguna entrada activa                                           | `private`   | —          | —              | —              | No           |
 
 Todos los grupos estructurados que llegan a la página principal se filtran mediante
 `isVisibleContent`. La sección de proyectos y la sección de formación no se
@@ -58,12 +58,9 @@ marcadores de educación, credenciales y formación complementaria.
   enlaces sociales apuntan únicamente a LinkedIn, GitHub y Credly. Esta parte
   quedó aprobada y no se revirtió.
 - Se agregó un nuevo caso (`portafolio-personal.json`, slug
-  `portafolio-personal`): "Este portafolio". El concepto está aceptado, pero
-  permanece en `preview`/`draft` — no se publica todavía — hasta que el
-  Consejo revise el contenido exacto (resultado, estado y enlaces) y
-  confirme que no exagera el estado actual del sitio. No es un caso
-  institucional. Portal CSIRT, Concentrador de Plataformas y NFCores no se
-  tocaron.
+  `portafolio-personal`): "Este portafolio". No es un caso institucional.
+  Portal CSIRT, Concentrador de Plataformas y NFCores no se tocaron y siguen
+  sin promoverse.
 - **Revertido**: en una primera pasada se habían promovido ambas
   certificaciones (Fortinet Certified Fundamentals y SFPC) a
   `public`/`approved` usando el perfil general de Credly como
@@ -79,6 +76,16 @@ marcadores de educación, credenciales y formación complementaria.
 - `scripts/verify-production-content.mjs` mantiene los nombres de ambas
   certificaciones en `structuredNonPublicMarkers`, ya que siguen sin ser
   contenido público.
-- Como ni "Este portafolio" ni ningún otro caso está en `public`, la sección
-  Proyectos y el elemento "Proyectos" del menú también están ausentes del
-  build de producción actual (`projects.length === 0`).
+
+## Actualización — PR #14, ronda de aprobación de "Este portafolio"
+
+- "Este portafolio" pasó a `public`/`approved` con la redacción de `approach`
+  (esquema y verificador), `outcome` y `notice` provistas por el Consejo, y
+  `verifiedLinks` apuntando al repositorio público. Portal CSIRT,
+  Concentrador de Plataformas, NFCores, educación, Fortinet y SFPC **no** se
+  promovieron.
+- Como consecuencia, la sección Proyectos y el elemento de menú "Proyectos"
+  ahora aparecen en el build de producción (`projects.length === 1`). La
+  sección Credenciales y el elemento "Formación y credenciales" siguen
+  ausentes: ninguna certificación cuenta todavía con URL de insignia
+  individual verificable.

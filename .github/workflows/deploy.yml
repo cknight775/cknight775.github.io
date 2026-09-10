@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check repository for secrets
+        run: npm run check:secrets
+
       - name: Build production site
         run: npm run build
         env:
@@ -37,6 +40,9 @@ jobs:
 
       - name: Verify production content policy
         run: npm run check:production-content
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0

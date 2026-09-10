@@ -31,9 +31,10 @@ dependencia vulnerable sí estaba instalada en CI y en entornos de desarrollo.
 
 ### Remediación
 
-Se ejecutó `npm audit fix` (sin `--force`) y adicionalmente se fijó
-explícitamente `sharp 0.35.3` mediante `overrides` en `package.json`,
-regenerando el lockfile.
+Se fijó explícitamente `sharp 0.35.3` mediante `overrides` en `package.json`
+y se regeneró el lockfile. No se ejecutó `npm audit fix` en este paso: el
+cambio fue manual y acotado a `sharp`/`libvips`, sin tocar otras
+dependencias.
 
 La remediación debe considerarse válida únicamente cuando se cumpla todo lo
 siguiente:
@@ -86,13 +87,25 @@ pero queda documentado por completitud al revisar el mismo rango de versiones.
 
 ### Remediación
 
-Se ejecutó `npm audit fix` (sin `--force`), que actualizó `astro` a `7.3.2` y
-fijó `sharp` a `0.35.4` mediante `overrides` en `package.json`, regenerando el
-lockfile.
+Esta actualización combinó dos pasos:
+
+1. **Actualización explícita**: se subió `astro` a `7.3.2` y
+   `@astrojs/sitemap` a `3.7.4` en `package.json`, y se fijó `sharp` a
+   `0.35.4` mediante `overrides`.
+2. **`npm audit fix` (sin `--force`)**: ejecutado a continuación sobre el
+   árbol resultante, resolvió además `fast-uri` a `3.1.7` (transitiva de
+   `ajv`, usada por el language server de `@astrojs/check` para YAML) y
+   `svgo` a `4.1.0` (transitiva de `astro`), ambas señaladas por `npm audit`
+   en ese momento. No se usó `--force`, así que no se aplicó ningún cambio
+   con potencial de romper compatibilidad (major bump) sin revisión manual.
+
+Ambos pasos quedaron en el mismo commit (`fix: update Astro dependencies for
+security advisories`), por lo que el lockfile refleja el resultado combinado.
 
 ### Validación posterior
 
 - `npm ls astro` resuelve `7.3.2`; `npm ls sharp` resuelve `0.35.4`.
+- `npm ls fast-uri` resuelve `3.1.7`; `npm ls svgo` resuelve `4.1.0`.
 - `npm audit --omit=dev --audit-level=high` finaliza sin vulnerabilidades.
 - `npm audit --audit-level=high` (incluyendo dependencias de desarrollo)
   finaliza sin vulnerabilidades.
