@@ -1,17 +1,16 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
+import { extname, join } from 'node:path';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 
-const run = promisify(execFile);
-
 const HOST = '127.0.0.1';
 const PORT = 4173;
 const BASE = `http://${HOST}:${PORT}`;
 const REPORT_DIR = 'qa-reports';
+const DIST_DIR = 'dist';
 
 // Approved thresholds (Consejo, PR #14).
 const THRESHOLDS = {
@@ -21,17 +20,72 @@ const THRESHOLDS = {
   seo: 95,
 };
 
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+  '.webp': 'image/webp',
+};
+
+// A static file server for the already-built `dist/` output, run in this
+// same process. Deliberately avoids spawning `astro preview` (or any other
+// external server process): a detached child that doesn't fully release
+// its inherited stdout/stderr can leave a CI step's log pipe open forever
+// even after this script has finished, hanging the job. An in-process
+// http.Server has no such risk and is trivial to shut down deterministically.
+async function startStaticServer() {
+  const server = createServer(async (req, res) => {
+    try {
+      const pathname = decodeURIComponent(new URL(req.url, BASE).pathname);
+      let filePath = join(DIST_DIR, pathname);
+      let fileStat = await stat(filePath).catch(() => null);
+      if (fileStat?.isDirectory()) {
+        filePath = join(filePath, 'index.html');
+        fileStat = await stat(filePath).catch(() => null);
+      }
+      if (!fileStat) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not found');
+        return;
+      }
+      const data = await readFile(filePath);
+      res.writeHead(200, {
+        'Content-Type':
+          MIME_TYPES[extname(filePath)] ?? 'application/octet-stream',
+      });
+      res.end(data);
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(String(error));
+    }
+  });
+  await new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(PORT, HOST, resolve);
+  });
+  return server;
+}
+
 async function discoverPaths() {
-  const xml = await readFile('dist/sitemap-index.xml', 'utf8').catch(
+  const xml = await readFile(`${DIST_DIR}/sitemap-index.xml`, 'utf8').catch(
     () => null,
   );
   const sitemapFiles = xml
     ? [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
-    : ['dist/sitemap-0.xml'];
+    : [`${DIST_DIR}/sitemap-0.xml`];
 
   const paths = new Set();
   for (const entry of sitemapFiles) {
-    const localPath = entry.startsWith('http') ? 'dist/sitemap-0.xml' : entry;
+    const localPath = entry.startsWith('http')
+      ? `${DIST_DIR}/sitemap-0.xml`
+      : entry;
     const content = await readFile(localPath, 'utf8').catch(() => null);
     if (!content) continue;
     for (const match of content.matchAll(/<loc>([^<]+)<\/loc>/g)) {
@@ -41,20 +95,6 @@ async function discoverPaths() {
   }
   if (paths.size === 0) paths.add('/');
   return [...paths];
-}
-
-async function waitForServer(url, timeoutMs = 20000) {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return;
-    } catch {
-      // not up yet
-    }
-    await new Promise((resolve) => setTimeout(resolve, 300));
-  }
-  throw new Error(`Timed out waiting for ${url}`);
 }
 
 async function runLighthouseFor(url, chromePath, slug) {
@@ -116,7 +156,7 @@ async function checkInternalLinks(browser, url) {
         (id) => document.getElementById(id) !== null,
         href.slice(1),
       );
-      if (!exists) broken.push(`${url} -> ${href} (element not found)`);
+      if (!exists) broken.push(`${href} (element not found)`);
       continue;
     }
     const target = new URL(href, url);
@@ -124,7 +164,7 @@ async function checkInternalLinks(browser, url) {
       ok: false,
       status: `ERROR: ${e.message}`,
     }));
-    if (!res.ok) broken.push(`${url} -> ${href} (HTTP ${res.status})`);
+    if (!res.ok) broken.push(`${href} (HTTP ${res.status})`);
   }
   await context.close();
   return broken;
@@ -135,16 +175,8 @@ async function main() {
   const paths = await discoverPaths();
   console.log(`Discovered public paths from sitemap: ${paths.join(', ')}`);
 
-  await run('npx', [
-    '--no-install',
-    'astro',
-    'preview',
-    '--host',
-    HOST,
-    '--port',
-    String(PORT),
-  ]);
-  await waitForServer(BASE + '/');
+  const server = await startStaticServer();
+  console.log(`Serving ${DIST_DIR}/ at ${BASE}`);
 
   const failures = [];
   const chromePath = chromium.executablePath();
@@ -186,9 +218,7 @@ async function main() {
     }
   } finally {
     await browser.close();
-    await run('npx', ['--no-install', 'astro', 'preview', 'stop']).catch(
-      () => {},
-    );
+    await new Promise((resolve) => server.close(resolve));
   }
 
   await writeFile(
