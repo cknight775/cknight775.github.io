@@ -36,6 +36,20 @@ jobs:
       - name: Verify production content policy
         run: npm run check:production-content
 
+      - name: Install Playwright Chromium
+        run: npx --no-install playwright install --with-deps chromium
+
+      - name: Check Lighthouse, accessibility and internal links (#13)
+        run: npm run check:quality-gates
+
+      - name: Upload quality gate reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: quality-gate-reports
+          path: qa-reports/
+          retention-days: 30
+
       - name: Build preview content (review only, never published)
         run: npm run build
         env:

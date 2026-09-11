@@ -13,6 +13,7 @@
     "check": "astro check",
     "check:secrets": "node scripts/check-secrets.mjs",
     "check:production-content": "node scripts/verify-production-content.mjs",
+    "check:quality-gates": "node scripts/check-quality-gates.mjs",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
@@ -23,6 +24,10 @@
     "typescript": "^5.9.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.4.1",
+    "playwright": "^1.63.0",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1"
   },

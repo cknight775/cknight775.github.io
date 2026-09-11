@@ -13,7 +13,10 @@ export const reviewSchema = z
     // no `pending` option: entries without one of these two states must not
     // be committed to a public repo in the first place.
     repositoryPublication: z.enum(['approved', 'not-required']),
-    sanitized: z.boolean(),
+    // Required true unconditionally, not only for visibility: public — every
+    // entry's source lives in this public repository regardless of whether
+    // the site renders it, so none may be committed unsanitized.
+    sanitized: z.literal(true),
     verifiedLinks: z.array(
       z.object({
         label: z.string().min(1),
@@ -33,13 +36,6 @@ export const reviewSchema = z
         code: 'custom',
         message: 'Public content requires validation=approved.',
         path: ['validation'],
-      });
-    }
-    if (!review.sanitized) {
-      context.addIssue({
-        code: 'custom',
-        message: 'Public content requires sanitized=true.',
-        path: ['sanitized'],
       });
     }
     if (!validGate(review.opsec)) {

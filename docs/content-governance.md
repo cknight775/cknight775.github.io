@@ -18,13 +18,15 @@ de contenido y el build mediante `src/content.config.ts`.
   público en un estado a medio decidir, así que el esquema rechaza (falla al
   compilar) cualquier entrada sin uno de estos dos valores explícitos.
 - `review.sanitized`: confirma que la entrada fue preparada para no exponer
-  información sensible; no equivale por sí sola a aprobación OPSEC.
+  información sensible; no equivale por sí sola a aprobación OPSEC. Es
+  `z.literal(true)` — obligatorio para **toda** entrada, no solo para
+  `visibility: public`, porque el repositorio es público y expone la fuente
+  de cualquier entrada comiteada, sin importar su `visibility`.
 
 `private` impide generar la entrada. El build normal incluye exclusivamente
-`public`. Una entrada pública exige `validation: approved`,
-`sanitized: true` y estados OPSEC y de autorización institucional en
-`approved` o `not-required`. Una combinación pública inválida falla al
-sincronizar la colección.
+`public`. Una entrada pública exige además `validation: approved` y estados
+OPSEC y de autorización institucional en `approved` o `not-required`. Una
+combinación pública inválida falla al sincronizar la colección.
 
 `preview` solo se habilita explícitamente con `CONTENT_PREVIEW=true` en un
 entorno de revisión. Este modo no se utiliza en CI de producción. El paso
@@ -46,9 +48,12 @@ repositorio de GitHub, que es público. Una entrada en `preview` con OPSEC
 archivo fuente para cualquiera que lo abra en GitHub — son dos gates
 distintos, y hasta esta revisión solo el primero tenía un campo propio.
 
-El propietario revisó esta distinción y **autorizó explícitamente** que las
-siguientes fuentes sanitizadas permanezcan en el repositorio público, con
-`review.repositoryPublication: 'approved'`:
+El propietario revisó esta distinción y **autorizó explícitamente, el
+2026-09-10,** que las siguientes fuentes sanitizadas permanezcan en el
+repositorio público, con `review.repositoryPublication: 'approved'`. Esa
+fecha es la de la autorización misma, no necesariamente la de
+`lastReviewed` de cada entrada (que sigue reflejando la última revisión de
+contenido/OPSEC, sin relación con este gate):
 
 - Portal CSIRT (`src/content/projects/portal-csirt.json`).
 - Concentrador de Plataformas

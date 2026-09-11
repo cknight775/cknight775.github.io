@@ -1,11 +1,39 @@
 # Estado de los gates de #9, #12 y #13
 
-Evidencia reproducible generada contra el commit `1333d341f57c5c6767bb2200124cffeba8888a44`
-(build de producción, `CONTENT_PREVIEW` deshabilitado), servido con `astro
-preview` y auditado con Lighthouse, `@axe-core/playwright` y comprobaciones
-manuales de enlaces vía Playwright. Ninguna herramienta usada aquí (Lighthouse,
-axe-core) se agregó como dependencia del proyecto; se instalaron en un
-directorio temporal fuera del repositorio solo para esta verificación.
+## Automatización en CI (a partir de esta ronda)
+
+Lighthouse, axe-core y la verificación de enlaces internos dejaron de ser
+una comprobación manual puntual: `validate.yml` ejecuta
+`npm run check:quality-gates` (`scripts/check-quality-gates.mjs`) en cada
+PR, después del build público y `check:production-content`. El script:
+
+1. Lee `dist/sitemap-index.xml` para descubrir las páginas públicas reales
+   del build (no hay rutas hardcodeadas).
+2. Levanta `astro preview` sobre ese build y espera a que responda.
+3. Para cada página: corre Lighthouse (API programática) y falla si
+   `performance < 90`, `accessibility < 95`, `best-practices < 95` o
+   `seo < 95`; corre axe-core (`@axe-core/playwright`, WCAG 2.0/2.1 A+AA) y
+   falla si hay alguna violación; verifica que cada enlace interno
+   (`href` relativo o ancla `#id`) resuelva.
+4. Guarda todos los reportes en `qa-reports/` y los sube como artefacto de
+   CI (`quality-gate-reports`, 30 días), incluso si el paso falla.
+5. Sale con código distinto de cero si algo no cumple el umbral — hace que
+   una regresión falle el check obligatorio `quality`.
+
+`playwright`, `lighthouse`, `@axe-core/playwright` y `chrome-launcher` son
+`devDependencies` con versión resuelta en `package-lock.json`; `npm ci` los
+instala de forma determinista. El único paso de CI que descarga algo es
+`npx --no-install playwright install --with-deps chromium`: baja el
+binario de Chromium que corresponde a la versión ya fijada de `playwright`
+(no una versión arbitraria), y `--no-install` evita que `npx` intente
+resolver un paquete que no esté ya instalado.
+
+Los resultados narrativos de abajo (Lighthouse, axe-core, movimiento
+reducido, enlaces) provienen de una corrida de este mismo script contra el
+commit `1333d341f57c5c6767bb2200124cffeba8888a44`, antes de integrarlo a
+`validate.yml`. A partir de ahora, la fuente de verdad son las corridas de
+CI en cada PR (ver la pestaña Actions y el artefacto
+`quality-gate-reports`), no este documento.
 
 ## Lighthouse
 
