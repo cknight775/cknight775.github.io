@@ -85,7 +85,12 @@ async function discoverProjectPaths() {
       paths.add(url.pathname);
     }
   }
-  return [...paths].filter((p) => p.startsWith('/proyectos/'));
+  return [...paths]
+    .filter((p) => p.startsWith('/proyectos/'))
+    .map((path) => ({
+      path,
+      slug: path.replace(/^\/proyectos\//, '').replace(/\/$/, ''),
+    }));
 }
 
 // Opens a page, records console/pageerror/failed-response issues, runs
@@ -135,7 +140,10 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const projectPaths = await discoverProjectPaths();
   console.log(
-    `Discovered project pages from sitemap: ${projectPaths.join(', ') || '(none)'}`,
+    `Discovered project pages from sitemap: ${
+      projectPaths.map((p) => `${p.path} (slug: ${p.slug})`).join(', ') ||
+      '(none)'
+    }`,
   );
 
   const server = await startStaticServer();
@@ -151,8 +159,11 @@ async function main() {
       });
       const proyectos = page.locator('#proyectos');
       if ((await proyectos.count()) > 0) {
+        // A real 1440x900 viewport capture (not an element-bounded one, which
+        // is only as wide as the centered content column and as tall as the
+        // section's own content).
         await proyectos.scrollIntoViewIfNeeded();
-        await proyectos.screenshot({
+        await page.screenshot({
           path: `${OUT_DIR}/home-proyectos-1440x900.png`,
         });
       } else {
@@ -185,25 +196,25 @@ async function main() {
       });
     });
 
-    for (const projectPath of projectPaths) {
+    for (const { path: projectPath, slug } of projectPaths) {
       await withPage(browser, VIEWPORTS.desktop, async (page) => {
         await goto(page, projectPath);
         await page.screenshot({
-          path: `${OUT_DIR}/caso-portafolio-desktop-1440x900.png`,
+          path: `${OUT_DIR}/caso-${slug}-desktop-1440x900.png`,
         });
       });
 
       await withPage(browser, VIEWPORTS.mobile, async (page) => {
         await goto(page, projectPath);
         await page.screenshot({
-          path: `${OUT_DIR}/caso-portafolio-mobile-390x844.png`,
+          path: `${OUT_DIR}/caso-${slug}-mobile-390x844.png`,
         });
       });
 
       await withPage(browser, VIEWPORTS.tablet, async (page) => {
         await goto(page, projectPath);
         await page.screenshot({
-          path: `${OUT_DIR}/caso-portafolio-tablet-768x1024.png`,
+          path: `${OUT_DIR}/caso-${slug}-tablet-768x1024.png`,
         });
       });
     }

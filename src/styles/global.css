@@ -105,7 +105,7 @@ a {
   top: 0;
   align-self: flex-start;
   height: 100vh;
-  width: 92px;
+  width: 108px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -162,10 +162,6 @@ a {
   stroke-linecap: round;
   stroke-linejoin: round;
   flex-shrink: 0;
-}
-.sidebar nav a span {
-  hyphens: auto;
-  overflow-wrap: anywhere;
 }
 .sidebar nav a:hover,
 .sidebar nav a:focus-visible {
@@ -676,6 +672,12 @@ body.scroll-locked {
     width: 100%;
     max-width: 640px;
     margin-inline: auto;
+  }
+  .case-study {
+    padding: 2.5rem 0 6rem;
+  }
+  .case-hero {
+    padding: 2.5rem 0 3rem;
   }
   .section-heading.horizontal {
     display: block;
