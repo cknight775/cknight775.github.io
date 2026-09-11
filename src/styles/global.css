@@ -164,6 +164,7 @@ a {
   flex-shrink: 0;
 }
 .sidebar nav a span {
+  hyphens: auto;
   overflow-wrap: anywhere;
 }
 .sidebar nav a:hover,
