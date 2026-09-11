@@ -9,7 +9,11 @@ PR, después del build público y `check:production-content`. El script:
 
 1. Lee `dist/sitemap-index.xml` para descubrir las páginas públicas reales
    del build (no hay rutas hardcodeadas).
-2. Levanta `astro preview` sobre ese build y espera a que responda.
+2. Sirve `dist/` con un `node:http.Server` dentro del mismo proceso (no
+   `astro preview`, que daemoniza un subproceso propio y puede dejar el
+   pipe de stdout/stderr del step de CI abierto indefinidamente incluso
+   después de terminar). El servidor se cierra determinísticamente al
+   finalizar, dentro de un bloque `finally`.
 3. Para cada página: corre Lighthouse (API programática) y falla si
    `performance < 90`, `accessibility < 95`, `best-practices < 95` o
    `seo < 95`; corre axe-core (`@axe-core/playwright`, WCAG 2.0/2.1 A+AA) y

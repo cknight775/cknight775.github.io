@@ -106,7 +106,7 @@ export const education = [
       repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
-      lastReviewed: '2026-08-21',
+      lastReviewed: '2026-09-10',
     },
   },
   {
@@ -122,7 +122,7 @@ export const education = [
       repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
-      lastReviewed: '2026-08-21',
+      lastReviewed: '2026-09-10',
     },
   },
   {
@@ -138,7 +138,7 @@ export const education = [
       repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
-      lastReviewed: '2026-08-21',
+      lastReviewed: '2026-09-10',
     },
   },
 ].map((item) => educationSchema.parse(item));
