@@ -15,6 +15,7 @@ const publicReview = () => ({
   status: 'active' as const,
   opsec: 'not-required' as const,
   institutionalAuthorization: 'not-required' as const,
+  repositoryPublication: 'not-required' as const,
   sanitized: true,
   verifiedLinks: [],
   lastReviewed: '2026-08-21',
@@ -47,6 +48,7 @@ export const profile = profileSchema.parse({
     status: 'active',
     opsec: 'not-required',
     institutionalAuthorization: 'not-required',
+    repositoryPublication: 'not-required',
     sanitized: true,
     verifiedLinks: [
       { label: 'GitHub', url: 'https://github.com/cknight775' },
@@ -101,6 +103,7 @@ export const education = [
       status: 'completed',
       opsec: 'pending',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-08-21',
@@ -116,6 +119,7 @@ export const education = [
       status: 'completed',
       opsec: 'pending',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-08-21',
@@ -131,6 +135,7 @@ export const education = [
       status: 'completed',
       opsec: 'pending',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'approved',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-08-21',
@@ -149,6 +154,7 @@ export const certifications = [
       status: 'obtained',
       opsec: 'not-required',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'not-required',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-09-10',
@@ -164,6 +170,7 @@ export const certifications = [
       status: 'obtained',
       opsec: 'not-required',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'not-required',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-09-10',
@@ -182,6 +189,7 @@ export const complementaryTraining = [
       status: 'in-progress',
       opsec: 'not-required',
       institutionalAuthorization: 'not-required',
+      repositoryPublication: 'not-required',
       sanitized: true,
       verifiedLinks: [],
       lastReviewed: '2026-08-21',
@@ -201,9 +209,21 @@ export const contact = contactSchema.parse({
 export const contentGovernance = {
   locale: 'es',
   futureLocales: [] as const,
-  education: { validation: 'verified', visibility: 'preview' },
-  certifications: { validation: 'verified', visibility: 'preview' },
-  complementaryTraining: { validation: 'verified', visibility: 'preview' },
+  education: {
+    validation: 'verified',
+    visibility: 'preview',
+    repositoryPublication: 'approved',
+  },
+  certifications: {
+    validation: 'verified',
+    visibility: 'preview',
+    repositoryPublication: 'not-required',
+  },
+  complementaryTraining: {
+    validation: 'verified',
+    visibility: 'preview',
+    repositoryPublication: 'not-required',
+  },
 } as const;
 
 export const specialties = [

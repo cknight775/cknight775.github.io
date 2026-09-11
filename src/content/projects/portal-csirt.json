@@ -21,6 +21,7 @@
     "status": "draft",
     "opsec": "pending",
     "institutionalAuthorization": "pending",
+    "repositoryPublication": "approved",
     "sanitized": true,
     "verifiedLinks": [],
     "lastReviewed": "2026-08-21"

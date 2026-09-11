@@ -7,6 +7,12 @@ export const reviewSchema = z
     status: z.enum(['draft', 'active', 'completed', 'obtained', 'in-progress']),
     opsec: z.enum(['not-required', 'pending', 'approved']),
     institutionalAuthorization: z.enum(['not-required', 'pending', 'approved']),
+    // Independent from `visibility`: whether the propietario explicitly
+    // authorized this sanitized SOURCE FILE to live in the public GitHub
+    // repository, regardless of whether the built site renders it. There is
+    // no `pending` option: entries without one of these two states must not
+    // be committed to a public repo in the first place.
+    repositoryPublication: z.enum(['approved', 'not-required']),
     sanitized: z.boolean(),
     verifiedLinks: z.array(
       z.object({

@@ -11,6 +11,12 @@ de contenido y el build mediante `src/content.config.ts`.
 - `review.opsec`: `not-required`, `pending` o `approved`.
 - `review.institutionalAuthorization`: `not-required`, `pending` o
   `approved`.
+- `review.repositoryPublication`: `approved` o `not-required`. Independiente
+  de `visibility`: autoriza que el archivo fuente sanitizado exista en el
+  repositorio público de GitHub, sin importar si el sitio construido lo
+  renderiza. Sin `pending`: una entrada no puede comitearse a un repositorio
+  público en un estado a medio decidir, así que el esquema rechaza (falla al
+  compilar) cualquier entrada sin uno de estos dos valores explícitos.
 - `review.sanitized`: confirma que la entrada fue preparada para no exponer
   información sensible; no equivale por sí sola a aprobación OPSEC.
 
@@ -29,6 +35,41 @@ Los casos institucionales permanecen como borradores sanitizados, visibles
 únicamente para preview, con OPSEC y autorización institucional pendientes.
 NFCores no requiere revisión ni autorización institucional, pero su contenido
 continúa como borrador de preview.
+
+### Decisión registrada: publicación de fuentes en el repositorio
+
+`review.visibility` controla si Astro **genera** una entrada en el HTML del
+sitio; no controla si el archivo fuente (`src/content/projects/*.json`,
+educación y certificaciones en `src/data/profile.ts`) es legible en el
+repositorio de GitHub, que es público. Una entrada en `preview` con OPSEC
+`pending` no aparece en `dist/`, pero su texto sanitizado sí es visible en el
+archivo fuente para cualquiera que lo abra en GitHub — son dos gates
+distintos, y hasta esta revisión solo el primero tenía un campo propio.
+
+El propietario revisó esta distinción y **autorizó explícitamente** que las
+siguientes fuentes sanitizadas permanezcan en el repositorio público, con
+`review.repositoryPublication: 'approved'`:
+
+- Portal CSIRT (`src/content/projects/portal-csirt.json`).
+- Concentrador de Plataformas
+  (`src/content/projects/concentrador-plataformas.json`).
+- Las tres entradas de educación en `src/data/profile.ts`, incluidas las de
+  origen militar.
+
+Esta autorización cubre únicamente la presencia del texto sanitizado como
+archivo fuente en el repositorio; no cambia `opsec`, `institutionalAuthorization`
+ni `visibility` de ninguna de estas entradas, que siguen sin poder generarse
+en el build normal hasta que esos otros gates se aprueben por separado.
+El resto del contenido no institucional (perfil, experiencia, especialidades,
+tecnologías, contacto, certificaciones, formación complementaria, NFCores,
+"Este portafolio") usa `repositoryPublication: 'not-required'`: no describe
+nada institucional o sensible que requiriera esta autorización explícita.
+
+En consecuencia, ningún documento de este proyecto debe afirmar que el
+contenido en `preview` "no se publicó": lo correcto es decir que no se
+**generó** en el HTML ni se **desplegó** en Pages — su fuente sanitizada sí
+está publicada en el repositorio, con autorización explícita registrada
+arriba.
 
 ## Datos profesionales
 

@@ -28,6 +28,7 @@
     "status": "active",
     "opsec": "not-required",
     "institutionalAuthorization": "not-required",
+    "repositoryPublication": "not-required",
     "sanitized": true,
     "verifiedLinks": [
       {

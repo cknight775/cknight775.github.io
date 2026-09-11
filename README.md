@@ -76,7 +76,11 @@ revocación inmediata si alguna credencial llegara a exponerse.
 
 - No publicar información operacional o institucional sensible.
 - No incorporar métricas, certificaciones o resultados sin validación.
-- No publicar teléfono ni dirección física.
+- No publicar teléfono, dirección física ni correo electrónico.
 - Los casos institucionales requieren revisión OPSEC antes del despliegue.
+- La visibilidad en el sitio (`review.visibility`) y la autorización para que
+  un archivo fuente sanitizado exista en este repositorio público
+  (`review.repositoryPublication`) son gates independientes; ver
+  [`docs/content-governance.md`](docs/content-governance.md).
 
 El seguimiento del proyecto se mantiene en el [issue maestro #1](https://github.com/cknight775/cknight775.github.io/issues/1).

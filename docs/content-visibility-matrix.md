@@ -3,24 +3,30 @@
 Estado correspondiente al issue #5. La matriz describe qué puede incluir el build
 normal y qué requiere el modo explícito `CONTENT_PREVIEW=true`.
 
-| Grupo                    | Contenido                                                        | Visibilidad | Validación | OPSEC          | Autorización   | Build normal |
-| ------------------------ | ---------------------------------------------------------------- | ----------- | ---------- | -------------- | -------------- | ------------ |
-| Perfil                   | Identidad, posicionamiento y métricas aprobadas                  | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Trayectoria              | Tres responsabilidades profesionales sanitizadas                 | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Especialidades           | Cuatro capacidades profesionales                                 | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Tecnologías              | Cuatro grupos sin porcentajes                                    | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Contacto                 | LinkedIn, GitHub y Credly (sin correo)                           | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Casos                    | Este portafolio                                                  | `public`    | `approved` | `not-required` | `not-required` | Sí           |
-| Casos                    | Portal CSIRT                                                     | `preview`   | `draft`    | `pending`      | `pending`      | No           |
-| Casos                    | Concentrador de Plataformas                                      | `preview`   | `draft`    | `pending`      | `pending`      | No           |
-| Casos                    | NFCores                                                          | `preview`   | `draft`    | `not-required` | `not-required` | No           |
-| Educación                | Ingeniería en Ciberseguridad                                     | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Educación                | Diplomado en Gestión de Ciberseguridad                           | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Educación                | Técnico de Nivel Superior en Telecomunicaciones                  | `preview`   | `verified` | `pending`      | `not-required` | No           |
-| Credencial               | Fortinet Certified Fundamentals (sin URL de insignia individual) | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Credencial               | SFPC (sin URL de insignia individual)                            | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Formación complementaria | Desarrollo Full Stack JavaScript, en curso                       | `preview`   | `verified` | `not-required` | `not-required` | No           |
-| Privado                  | Ninguna entrada activa                                           | `private`   | —          | —              | —              | No           |
+| Grupo                    | Contenido                                                        | Visibilidad | Validación | OPSEC          | Autorización   | Fuente en repo | Build normal |
+| ------------------------ | ---------------------------------------------------------------- | ----------- | ---------- | -------------- | -------------- | -------------- | ------------ |
+| Perfil                   | Identidad, posicionamiento y métricas aprobadas                  | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Trayectoria              | Tres responsabilidades profesionales sanitizadas                 | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Especialidades           | Cuatro capacidades profesionales                                 | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Tecnologías              | Cuatro grupos sin porcentajes                                    | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Contacto                 | LinkedIn, GitHub y Credly (sin correo)                           | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Casos                    | Este portafolio                                                  | `public`    | `approved` | `not-required` | `not-required` | `not-required` | Sí           |
+| Casos                    | Portal CSIRT                                                     | `preview`   | `draft`    | `pending`      | `pending`      | `approved`     | No           |
+| Casos                    | Concentrador de Plataformas                                      | `preview`   | `draft`    | `pending`      | `pending`      | `approved`     | No           |
+| Casos                    | NFCores                                                          | `preview`   | `draft`    | `not-required` | `not-required` | `not-required` | No           |
+| Educación                | Ingeniería en Ciberseguridad                                     | `preview`   | `verified` | `pending`      | `not-required` | `approved`     | No           |
+| Educación                | Diplomado en Gestión de Ciberseguridad                           | `preview`   | `verified` | `pending`      | `not-required` | `approved`     | No           |
+| Educación                | Técnico de Nivel Superior en Telecomunicaciones                  | `preview`   | `verified` | `pending`      | `not-required` | `approved`     | No           |
+| Credencial               | Fortinet Certified Fundamentals (sin URL de insignia individual) | `preview`   | `verified` | `not-required` | `not-required` | `not-required` | No           |
+| Credencial               | SFPC (sin URL de insignia individual)                            | `preview`   | `verified` | `not-required` | `not-required` | `not-required` | No           |
+| Formación complementaria | Desarrollo Full Stack JavaScript, en curso                       | `preview`   | `verified` | `not-required` | `not-required` | `not-required` | No           |
+| Privado                  | Ninguna entrada activa                                           | `private`   | —          | —              | —              | —              | No           |
+
+`Fuente en repo` es `review.repositoryPublication`: autoriza que el archivo
+fuente sanitizado viva en el repositorio público de GitHub, independiente de
+si `visibility` permite generarlo en el sitio. Detalle de la decisión y su
+alcance en
+[`docs/content-governance.md`](content-governance.md#decisión-registrada-publicación-de-fuentes-en-el-repositorio).
 
 Todos los grupos estructurados que llegan a la página principal se filtran mediante
 `isVisibleContent`. La sección de proyectos y la sección de formación no se
@@ -89,3 +95,18 @@ marcadores de educación, credenciales y formación complementaria.
   sección Credenciales y el elemento "Formación y credenciales" siguen
   ausentes: ninguna certificación cuenta todavía con URL de insignia
   individual verificable.
+
+## Actualización — PR #14, dimensión de publicación en repositorio
+
+- Se agregó `review.repositoryPublication` (`approved` | `not-required`,
+  sin `pending`) al esquema de revisión, independiente de `visibility`. El
+  propietario autorizó explícitamente que Portal CSIRT, Concentrador de
+  Plataformas y las tres entradas de educación mantengan su fuente
+  sanitizada en el repositorio público aunque su `visibility` siga en
+  `preview`. Detalle completo en
+  [`docs/content-governance.md`](content-governance.md#decisión-registrada-publicación-de-fuentes-en-el-repositorio).
+- El resto de entradas usa `not-required`: no describen nada institucional
+  ni sensible que requiriera esta autorización.
+- Esta autorización no cambia `opsec`, `institutionalAuthorization` ni
+  `visibility` de ninguna entrada; esos gates del sitio construido siguen
+  exactamente igual.
