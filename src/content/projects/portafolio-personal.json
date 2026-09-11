@@ -21,6 +21,20 @@
       "url": "https://github.com/cknight775/cknight775.github.io"
     }
   ],
+  "evidence": [
+    {
+      "src": "/evidence/portafolio-personal-desktop.webp",
+      "alt": "Portada del sitio en escritorio, con la barra lateral fija y la tarjeta de resumen profesional."
+    },
+    {
+      "src": "/evidence/portafolio-personal-drawer-movil.webp",
+      "alt": "Drawer de navegación abierto en móvil, con el fondo inerte detrás y el foco en el primer enlace."
+    },
+    {
+      "src": "/evidence/portafolio-personal-proyectos.webp",
+      "alt": "Sección Proyectos en escritorio, mostrando el caso público \"Este portafolio\"."
+    }
+  ],
   "notice": "El repositorio es público e incluye borradores institucionales sanitizados en preview, sin secretos, accesos, topologías ni detalles operacionales. Esos casos no se generan en producción sin aprobación.",
   "review": {
     "validation": "approved",
@@ -36,6 +50,6 @@
         "url": "https://github.com/cknight775/cknight775.github.io"
       }
     ],
-    "lastReviewed": "2026-09-10"
+    "lastReviewed": "2026-09-11"
   }
 }
