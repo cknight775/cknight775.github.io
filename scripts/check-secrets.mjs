@@ -8,6 +8,7 @@ const ignoredDirectories = new Set([
   '.npm-cache',
   'dist',
   'node_modules',
+  'visual-evidence',
 ]);
 const textExtensions = new Set([
   '',

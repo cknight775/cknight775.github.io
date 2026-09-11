@@ -8,9 +8,14 @@ interface NavItem {
 interface Props {
   showProjects?: boolean;
   showCredentials?: boolean;
+  activeSection?: string;
 }
 
-const { showProjects = false, showCredentials = false } = Astro.props;
+const {
+  showProjects = false,
+  showCredentials = false,
+  activeSection,
+} = Astro.props;
 
 const items: NavItem[] = [
   { href: '/#inicio', label: 'Inicio', icon: 'home' },
@@ -65,7 +70,13 @@ const ICONS = {
       {
         items.map((item) => (
           <li>
-            <a href={item.href} data-nav-section={item.href.slice(2)}>
+            <a
+              href={item.href}
+              data-nav-section={item.href.slice(2)}
+              aria-current={
+                item.href.slice(2) === activeSection ? 'true' : undefined
+              }
+            >
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d={ICONS[item.icon]} />
               </svg>

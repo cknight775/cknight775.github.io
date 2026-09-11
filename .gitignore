@@ -5,6 +5,7 @@ dist/
 .DS_Store
 *.log
 qa-reports/
+visual-evidence/
 
 # Plantilla heredada: retirada; artefactos residuales de compilaciones previas
 # a la migración no deben reaparecer versionados.
