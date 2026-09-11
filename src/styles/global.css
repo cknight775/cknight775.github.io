@@ -161,6 +161,10 @@ a {
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.sidebar nav a span {
+  overflow-wrap: anywhere;
 }
 .sidebar nav a:hover,
 .sidebar nav a:focus-visible {
