@@ -281,13 +281,25 @@ async function waitForImages(locator) {
 
 // A plain `locator.screenshot()` on an element taller than the viewport
 // makes Playwright capture "beyond the viewport", which on this page
-// mis-renders position: fixed/sticky elements (the skip link, the sidebar)
-// at coordinates relative to the *original* scroll position instead of the
-// expanded capture area — they bleed into the shot instead of staying put.
-// Growing the real viewport to fit the element first avoids that capture
-// mode entirely: everything renders through the normal (non-beyond-viewport)
-// path, so fixed/sticky elements land where they actually belong.
+// mis-renders position: fixed/sticky elements (the skip link, the sidebar,
+// the mobile sidebar-toggle button) at coordinates relative to the
+// *original* scroll position instead of the expanded capture area — they
+// bleed into the shot instead of staying put. Growing the real viewport to
+// fit the element first avoids that capture mode, but position: fixed
+// elements are still viewport-relative by definition: scrolling the target
+// element's top to y=0 (needed so the clip below starts in the right place)
+// puts that same y=0 corner exactly where the fixed toggle button and skip
+// link normally live, so they can still show up in the clipped region.
+// Since none of that chrome is part of what this screenshot is meant to
+// verify, hiding it (visibility, not display, so layout — and therefore the
+// box measured below — doesn't shift) sidesteps the whole class of bug
+// rather than fighting the positioning arithmetic further.
 async function screenshotWholeElement(page, locator, path) {
+  await page.addStyleTag({
+    content:
+      '.sidebar, .sidebar-toggle, .sidebar-scrim, .skip-link { visibility: hidden !important; }',
+  });
+
   // scrollIntoViewIfNeeded() only scrolls until *some* part is visible, which
   // for an element taller than the viewport can leave its top above y=0 (a
   // negative box.y breaks the clip math below) or its bottom cut off.
