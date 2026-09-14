@@ -619,8 +619,14 @@ footer {
 }
 .evidence-grid img {
   width: 100%;
+  height: auto;
   display: block;
   border: 1px solid var(--line);
+}
+.evidence-grid img.evidence-portrait {
+  grid-column: 1 / -1;
+  max-width: 390px;
+  margin-inline: auto;
 }
 
 @media (max-width: 900px) {

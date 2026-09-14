@@ -2,6 +2,7 @@ import { mkdir, readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { extname, join } from 'node:path';
 import { chromium } from 'playwright';
+import sharp from 'sharp';
 
 const HOST = '127.0.0.1';
 const PORT = 4174;
@@ -93,6 +94,79 @@ async function discoverProjectPaths() {
     }));
 }
 
+// The full list of files this run must produce, independent of whether the
+// capture steps below actually ran — so a step that silently no-ops (a
+// selector that stopped matching, a conditional that took the wrong branch)
+// is still caught by verifyCaptures() instead of passing quietly.
+function buildManifest(projectPaths) {
+  const manifest = [
+    { path: `${OUT_DIR}/home-desktop-1440x900.png`, ...VIEWPORTS.desktop },
+    { path: `${OUT_DIR}/home-tablet-768x1024.png`, ...VIEWPORTS.tablet },
+    {
+      path: `${OUT_DIR}/home-mobile-390x844-cerrado.png`,
+      ...VIEWPORTS.mobile,
+    },
+    {
+      path: `${OUT_DIR}/home-mobile-390x844-abierto.png`,
+      ...VIEWPORTS.mobile,
+    },
+    {
+      path: `${OUT_DIR}/gallery-desktop-1440x900.png`,
+      ...VIEWPORTS.desktop,
+    },
+    {
+      path: `${OUT_DIR}/gallery-mobile-drawer-390x844.png`,
+      ...VIEWPORTS.mobile,
+    },
+  ];
+
+  if (projectPaths.length > 0) {
+    manifest.push({
+      path: `${OUT_DIR}/home-proyectos-1440x900.png`,
+      ...VIEWPORTS.desktop,
+    });
+  }
+  for (const { slug } of projectPaths) {
+    manifest.push(
+      {
+        path: `${OUT_DIR}/caso-${slug}-desktop-1440x900.png`,
+        ...VIEWPORTS.desktop,
+      },
+      {
+        path: `${OUT_DIR}/caso-${slug}-mobile-390x844.png`,
+        ...VIEWPORTS.mobile,
+      },
+      {
+        path: `${OUT_DIR}/caso-${slug}-tablet-768x1024.png`,
+        ...VIEWPORTS.tablet,
+      },
+    );
+  }
+  return manifest;
+}
+
+async function verifyCaptures(manifest) {
+  const problems = [];
+  for (const { path: filePath, width, height } of manifest) {
+    const fileStat = await stat(filePath).catch(() => null);
+    if (!fileStat) {
+      problems.push(`${filePath}: missing`);
+      continue;
+    }
+    const metadata = await sharp(filePath).metadata();
+    if (metadata.width !== width || metadata.height !== height) {
+      problems.push(
+        `${filePath}: expected ${width}x${height}, got ${metadata.width}x${metadata.height}`,
+      );
+    }
+  }
+  if (problems.length > 0) {
+    throw new Error(
+      `Visual evidence verification failed:\n${problems.map((p) => `  - ${p}`).join('\n')}`,
+    );
+  }
+}
+
 // Opens a page, records console/pageerror/failed-response issues, runs
 // `run(page, url)`, then closes the context deterministically before
 // surfacing any recorded issue as a thrown error.
@@ -136,6 +210,16 @@ async function goto(page, path) {
   });
 }
 
+// Clicks the real sidebar toggle (never sets [data-open] directly) and waits
+// for the drawer's own attribute change, then lets its CSS transition finish.
+async function openDrawer(page) {
+  await page.locator('.sidebar-toggle').click();
+  await page
+    .locator('[data-sidebar][data-open]')
+    .waitFor({ state: 'attached' });
+  await page.waitForTimeout(250);
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const projectPaths = await discoverProjectPaths();
@@ -145,6 +229,7 @@ async function main() {
       '(none)'
     }`,
   );
+  const manifest = buildManifest(projectPaths);
 
   const server = await startStaticServer();
   console.log(`Serving ${DIST_DIR}/ at ${BASE}`);
@@ -183,16 +268,27 @@ async function main() {
       await page.screenshot({
         path: `${OUT_DIR}/home-mobile-390x844-cerrado.png`,
       });
-
-      const toggle = page.locator('.sidebar-toggle');
-      await toggle.click();
-      await page.locator('[data-sidebar][data-open]').waitFor({
-        state: 'attached',
-      });
-      // Let the CSS transform transition finish before capturing.
-      await page.waitForTimeout(250);
+      await openDrawer(page);
       await page.screenshot({
         path: `${OUT_DIR}/home-mobile-390x844-abierto.png`,
+      });
+    });
+
+    // Dedicated captures for the public case-study gallery, kept separate
+    // from the QA/design-review shots above so the two can diverge (crop,
+    // framing) without one silently changing the other.
+    await withPage(browser, VIEWPORTS.desktop, async (page) => {
+      await goto(page, '/');
+      await page.screenshot({
+        path: `${OUT_DIR}/gallery-desktop-1440x900.png`,
+      });
+    });
+
+    await withPage(browser, VIEWPORTS.mobile, async (page) => {
+      await goto(page, '/');
+      await openDrawer(page);
+      await page.screenshot({
+        path: `${OUT_DIR}/gallery-mobile-drawer-390x844.png`,
       });
     });
 
@@ -223,7 +319,9 @@ async function main() {
     await new Promise((resolve) => server.close(resolve));
   }
 
-  console.log(`\nVisual evidence captured in ${OUT_DIR}/.`);
+  await verifyCaptures(manifest);
+
+  console.log(`\nVisual evidence captured and verified in ${OUT_DIR}/.`);
 }
 
 main().catch((error) => {

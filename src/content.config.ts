@@ -21,7 +21,14 @@ const projects = defineCollection({
       .array(z.object({ label: z.string().min(1), url: z.url() }))
       .optional(),
     evidence: z
-      .array(z.object({ src: z.string().min(1), alt: z.string().min(1) }))
+      .array(
+        z.object({
+          src: z.string().min(1),
+          alt: z.string().min(1),
+          width: z.number().int().positive(),
+          height: z.number().int().positive(),
+        }),
+      )
       .optional(),
     notice: z.string().min(1),
     review: reviewSchema,

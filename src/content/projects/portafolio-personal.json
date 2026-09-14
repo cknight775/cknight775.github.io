@@ -24,15 +24,21 @@
   "evidence": [
     {
       "src": "/evidence/portafolio-personal-desktop.webp",
-      "alt": "Portada del sitio en escritorio, con la barra lateral fija y la tarjeta de resumen profesional."
-    },
-    {
-      "src": "/evidence/portafolio-personal-drawer-movil.webp",
-      "alt": "Drawer de navegación abierto en móvil, con el fondo inerte detrás y el foco en el primer enlace."
+      "alt": "Portada del sitio en escritorio, con la barra lateral fija y la tarjeta de resumen profesional.",
+      "width": 1440,
+      "height": 900
     },
     {
       "src": "/evidence/portafolio-personal-proyectos.webp",
-      "alt": "Sección Proyectos en escritorio, mostrando el caso público \"Este portafolio\"."
+      "alt": "Sección Proyectos en escritorio, mostrando el caso público \"Este portafolio\".",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "src": "/evidence/portafolio-personal-drawer-movil.webp",
+      "alt": "Menú de navegación abierto en móvil: logotipo y lista de enlaces a cada sección, con \"Inicio\" resaltado como sección activa.",
+      "width": 390,
+      "height": 844
     }
   ],
   "notice": "El repositorio es público e incluye borradores institucionales sanitizados en preview, sin secretos, accesos, topologías ni detalles operacionales. Esos casos no se generan en producción sin aprobación.",
