@@ -291,8 +291,14 @@ async function screenshotWholeElement(page, locator, path) {
   // scrollIntoViewIfNeeded() only scrolls until *some* part is visible, which
   // for an element taller than the viewport can leave its top above y=0 (a
   // negative box.y breaks the clip math below) or its bottom cut off.
-  // Aligning to the top explicitly guarantees box.y is ~0.
-  await locator.evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  // Aligning to the top explicitly guarantees box.y is ~0 — but global.css
+  // sets `html { scroll-behavior: smooth }`, and scrollIntoView() without an
+  // explicit behavior inherits that, so boundingBox() right after would
+  // measure a mid-animation position instead of the settled one.
+  // behavior: 'instant' overrides the CSS and jumps immediately.
+  await locator.evaluate((el) =>
+    el.scrollIntoView({ block: 'start', behavior: 'instant' }),
+  );
   const box = await locator.boundingBox();
   if (!box) throw new Error(`Element not found for screenshot: ${path}`);
 
