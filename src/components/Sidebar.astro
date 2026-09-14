@@ -1,0 +1,211 @@
+---
+interface NavItem {
+  href: string;
+  label: string;
+  icon: keyof typeof ICONS;
+}
+
+interface Props {
+  showProjects?: boolean;
+  showCredentials?: boolean;
+  activeSection?: string;
+}
+
+const {
+  showProjects = false,
+  showCredentials = false,
+  activeSection,
+} = Astro.props;
+
+const items: NavItem[] = [
+  { href: '/#inicio', label: 'Inicio', icon: 'home' },
+  { href: '/#perfil', label: 'Perfil', icon: 'user' },
+  { href: '/#experiencia', label: 'Experiencia', icon: 'briefcase' },
+  ...(showProjects
+    ? ([{ href: '/#proyectos', label: 'Proyectos', icon: 'folder' }] as const)
+    : []),
+  { href: '/#herramientas', label: 'Herramientas', icon: 'tool' },
+  ...(showCredentials
+    ? ([
+        {
+          href: '/#credenciales',
+          label: 'Formación y credenciales',
+          icon: 'award',
+        },
+      ] as const)
+    : []),
+  { href: '/#contacto', label: 'Contacto', icon: 'mail' },
+];
+
+const ICONS = {
+  home: 'M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z',
+  user: 'M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5Z',
+  briefcase:
+    'M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6h4a1 1 0 0 1 1 1v3H4V7a1 1 0 0 1 1-1h4Zm2-1.5V6h2V4.5h-2ZM4 11h16v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8Zm7 2v2h2v-2h-2Z',
+  folder:
+    'M4 6a1 1 0 0 1 1-1h4.5l2 2H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6Z',
+  tool: 'M14.7 6.3a4 4 0 0 0-5.4 4.6L4 16.2V20h3.8l5.3-5.3a4 4 0 0 0 4.6-5.4l-2.6 2.6-2-2 2.6-2.6Z',
+  award:
+    'M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm-2.7 9.4L7 21l5-2.6L17 21l-2.3-9.6M12 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z',
+  mail: 'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm.4 1.6 7.6 6 7.6-6',
+} as const;
+---
+
+<button
+  class="sidebar-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="primary-navigation"
+  aria-label="Abrir menú de navegación"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M3 6h18M3 12h18M3 18h18"></path>
+  </svg>
+</button>
+<div class="sidebar-scrim" data-scrim hidden></div>
+<aside class="sidebar" data-sidebar>
+  <a class="sidebar-brand" href="/#inicio" aria-label="Ir al inicio">CC</a>
+  <nav id="primary-navigation" aria-label="Navegación principal">
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              data-nav-section={item.href.slice(2)}
+              aria-current={
+                item.href.slice(2) === activeSection ? 'true' : undefined
+              }
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d={ICONS[item.icon]} />
+              </svg>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</aside>
+
+<script>
+  const sidebar = document.querySelector<HTMLElement>('[data-sidebar]');
+  const toggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
+  const scrim = document.querySelector<HTMLElement>('[data-scrim]');
+  const nav = document.querySelector<HTMLElement>('#primary-navigation');
+  const main = document.querySelector<HTMLElement>('.page-shell');
+  const skipLink = document.querySelector<HTMLElement>('.skip-link');
+  const links = nav?.querySelectorAll<HTMLAnchorElement>('a[data-nav-section]');
+  const mobile = window.matchMedia('(max-width: 900px)');
+
+  function setDrawer(open: boolean, returnFocus = false) {
+    if (!sidebar || !toggle || !scrim) return;
+    const mobileOpen = mobile.matches && open;
+    toggle.setAttribute('aria-expanded', String(mobileOpen));
+    sidebar.toggleAttribute('data-open', mobileOpen);
+    scrim.hidden = !mobileOpen;
+    document.body.classList.toggle('scroll-locked', mobileOpen);
+
+    // On mobile, keep the closed drawer out of the tab order and the
+    // background content (including the skip link, which sits outside
+    // .page-shell) inert while the drawer is open, so Tab/Shift+Tab can't
+    // escape to content behind the modal-like drawer.
+    sidebar.toggleAttribute('inert', mobile.matches && !mobileOpen);
+    main?.toggleAttribute('inert', mobileOpen);
+    skipLink?.toggleAttribute('inert', mobileOpen);
+
+    if (mobileOpen) {
+      links?.[0]?.focus();
+    } else if (returnFocus) {
+      toggle.focus();
+    }
+  }
+
+  toggle?.addEventListener('click', () => {
+    setDrawer(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  scrim?.addEventListener('click', () => setDrawer(false, true));
+
+  nav?.addEventListener('click', (event) => {
+    const link =
+      event.target instanceof Element ? event.target.closest('a') : null;
+    if (!link || !mobile.matches) return;
+
+    const sectionId = link.dataset.navSection;
+    const samePage = link.pathname === window.location.pathname;
+    setDrawer(false);
+
+    // Selecting a section moves focus to it so keyboard/screen-reader users
+    // land where they navigated to; if the target isn't on this page (or
+    // has no anchor), fall back to returning focus to the toggle.
+    if (samePage && sectionId && document.getElementById(sectionId)) {
+      document.getElementById(sectionId)?.focus();
+    } else {
+      toggle?.focus();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const isOpen = toggle?.getAttribute('aria-expanded') === 'true';
+    if (!isOpen) return;
+
+    if (event.key === 'Escape') {
+      setDrawer(false, true);
+      return;
+    }
+
+    // Trap Tab/Shift+Tab between the toggle and the last focusable link in
+    // the drawer while it's open, instead of letting focus fall through to
+    // inert content or off the end of the document.
+    if (event.key === 'Tab' && toggle && sidebar) {
+      const focusables = [
+        toggle,
+        ...sidebar.querySelectorAll<HTMLElement>('a'),
+      ];
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  mobile.addEventListener('change', () => setDrawer(false));
+  setDrawer(false);
+
+  if (links && links.length > 0 && 'IntersectionObserver' in window) {
+    const sections = Array.from(links)
+      .map((link) => {
+        const id = link.dataset.navSection;
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((section): section is HTMLElement => section !== null);
+
+    const setActive = (id: string | null) => {
+      links.forEach((link) => {
+        const isActive = link.dataset.navSection === id;
+        link.toggleAttribute('aria-current', isActive);
+        if (isActive) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.25, 0.5, 1] },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+</script>

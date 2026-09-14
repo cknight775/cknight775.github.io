@@ -1,0 +1,131 @@
+---
+import Sidebar from '@/components/Sidebar.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { isVisibleContent } from '@/data/publication';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const previewEnabled = import.meta.env.CONTENT_PREVIEW === 'true';
+  const projects = await getCollection('projects');
+  return projects
+    .filter(({ data }) => isVisibleContent(data.review, previewEnabled))
+    .map((project) => ({
+      params: { slug: project.id },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props as {
+  project: CollectionEntry<'projects'>;
+};
+const content = project.data;
+---
+
+<BaseLayout
+  title={`${content.title} | Cristóbal Catalán`}
+  description={content.summary}
+>
+  <div class="app-shell">
+    <Sidebar showProjects={true} activeSection="proyectos" />
+    <div class="page-shell">
+      <main id="contenido" class="case-study">
+        <a class="back-link" href="/#proyectos">← Volver a proyectos</a>
+        <header class="case-hero">
+          <p class="eyebrow">{content.eyebrow}</p>
+          <h1>{content.title}</h1>
+          <p>{content.summary}</p>
+        </header>
+        <div class="case-grid">
+          <section>
+            <p class="eyebrow">Contexto</p><h2>El desafío</h2><p>
+              {content.context}
+            </p>
+          </section>
+          <section>
+            <p class="eyebrow">Responsabilidad</p><h2>Mi rol</h2><p>
+              {content.role}
+            </p>
+          </section>
+          <section class="wide">
+            <p class="eyebrow">Enfoque</p><h2>Decisiones principales</h2><ul>
+              {content.approach.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+          <section class="wide">
+            <p class="eyebrow">Resultado y estado</p><h2>
+              {content.period} ·{' '}
+              {
+                {
+                  active: 'En curso',
+                  completed: 'Completado',
+                  archived: 'Archivado',
+                }[content.status]
+              }
+            </h2><p>{content.outcome}</p>
+          </section>
+          <section class="wide">
+            <p class="eyebrow">Tecnologías publicables</p><div class="tag-row">
+              {content.technologies.map((item) => <span>{item}</span>)}
+            </div>
+          </section>
+          {
+            content.publicLinks && content.publicLinks.length > 0 && (
+              <section class="wide">
+                <p class="eyebrow">Enlaces públicos</p>
+                <ul>
+                  {content.publicLinks.map((link) => (
+                    <li>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label} ↗
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+          {
+            content.evidence && content.evidence.length > 0 && (
+              <section class="wide evidence-section">
+                <p class="eyebrow">Evidencia</p>
+                <div class="evidence-grid">
+                  {content.evidence.map((item) => (
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      loading="lazy"
+                      width={item.width}
+                      height={item.height}
+                      class:list={[
+                        { 'evidence-portrait': item.height > item.width },
+                      ]}
+                    />
+                  ))}
+                </div>
+              </section>
+            )
+          }
+        </div>
+        {
+          content.notice && (
+            <aside class="security-note">
+              <>
+                <strong>Nota de alcance y seguridad</strong>
+                <p>{content.notice}</p>
+              </>
+            </aside>
+          )
+        }
+      </main>
+      <footer>
+        <span>© {new Date().getFullYear()} Cristóbal Catalán Guerrero</span><a
+          href="/#contacto">Contacto</a
+        >
+      </footer>
+    </div>
+  </div>
+</BaseLayout>

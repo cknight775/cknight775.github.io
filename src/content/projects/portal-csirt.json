@@ -1,0 +1,29 @@
+{
+  "order": 1,
+  "eyebrow": "Caso institucional sanitizado",
+  "title": "Portal CSIRT",
+  "summary": "Plataforma que organiza y distribuye contenidos, alertas y recursos de ciberseguridad desde una administración centralizada.",
+  "period": "2022",
+  "status": "completed",
+  "context": "El trabajo se desarrolló para el CSIRT de una institución del sector defensa. La información pública se limita deliberadamente a decisiones generales de producto y desarrollo.",
+  "role": "Diseño y desarrollo full-stack, desde la evolución conceptual hasta una plataforma preparada para operar en infraestructura institucional.",
+  "approach": [
+    "Centralización de contenidos y recursos en una experiencia coherente.",
+    "Administración desacoplada para facilitar actualización y mantenimiento.",
+    "Diseño orientado a funcionar sin depender de servicios externos."
+  ],
+  "technologies": ["React", "TypeScript", "Vite", "Node.js", "Express"],
+  "outcome": "Plataforma entregada y operando en infraestructura institucional; no se publican métricas ni resultados cuantitativos por política OPSEC.",
+  "notice": "No se publican repositorio, capturas, topología ni detalles operacionales. El activo pertenece a la institución correspondiente.",
+  "review": {
+    "validation": "draft",
+    "visibility": "preview",
+    "status": "draft",
+    "opsec": "pending",
+    "institutionalAuthorization": "pending",
+    "repositoryPublication": "approved",
+    "sanitized": true,
+    "verifiedLinks": [],
+    "lastReviewed": "2026-09-10"
+  }
+}

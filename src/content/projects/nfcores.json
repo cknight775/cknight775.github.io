@@ -1,0 +1,29 @@
+{
+  "order": 3,
+  "eyebrow": "Emprendimiento tecnológico",
+  "title": "Ecosistema NFCores",
+  "summary": "Línea independiente de productos y experimentación tecnológica dirigida por Cristóbal.",
+  "period": "2023 — Actualidad",
+  "status": "active",
+  "context": "NFCores se presenta como una identidad separada del trabajo institucional y de la marca profesional personal.",
+  "role": "Dirección de producto, diseño técnico y desarrollo de conceptos orientados a resolver necesidades digitales concretas.",
+  "approach": [
+    "Exploración de productos pequeños y enfocados.",
+    "Desarrollo iterativo con tecnologías web modernas.",
+    "Uso de NFC únicamente cuando aporta valor real a la solución."
+  ],
+  "technologies": ["React", "TypeScript", "Node.js", "NFC"],
+  "outcome": "Sin catálogo público validado todavía; se documentará producto por producto una vez que cada enlace supere verificación.",
+  "notice": "El catálogo y los resultados se incorporarán únicamente después de validar cada producto y enlace público.",
+  "review": {
+    "validation": "draft",
+    "visibility": "preview",
+    "status": "draft",
+    "opsec": "not-required",
+    "institutionalAuthorization": "not-required",
+    "repositoryPublication": "not-required",
+    "sanitized": true,
+    "verifiedLinks": [],
+    "lastReviewed": "2026-08-21"
+  }
+}

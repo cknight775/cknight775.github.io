@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="80%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#70a5ff" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#70a5ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#08111f" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+  <rect x="80" y="80" width="112" height="112" fill="none" stroke="#4ee1b3" stroke-width="4" />
+  <text x="136" y="164" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="56" font-weight="900" fill="#4ee1b3">CC</text>
+  <text x="80" y="330" font-family="ui-sans-serif, system-ui, sans-serif" font-size="64" font-weight="800" fill="#f4f7fb" letter-spacing="-2">Cristóbal Catalán</text>
+  <text x="80" y="390" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="600" fill="#9eacbc">Ciberseguridad · Concientización · Desarrollo seguro</text>
+  <rect x="80" y="440" width="10" height="10" fill="#4ee1b3" />
+  <text x="104" y="450" font-family="ui-monospace, monospace" font-size="24" fill="#4ee1b3">cknight775.github.io</text>
+</svg>

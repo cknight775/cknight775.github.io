@@ -1,0 +1,61 @@
+{
+  "order": 4,
+  "eyebrow": "Caso público",
+  "title": "Este portafolio",
+  "summary": "Reconstrucción del sitio personal con Astro y TypeScript, gobernada por un modelo de revisión que decide qué contenido puede publicarse.",
+  "period": "2026",
+  "status": "active",
+  "context": "El sitio anterior mezclaba HTML estático, un formulario PHP y datos personales sin un proceso claro de revisión. El objetivo fue reconstruirlo como un proyecto público y auditable: cada dato profesional pasa por puertas explícitas de validación, visibilidad, OPSEC y autorización institucional antes de aparecer en producción.",
+  "role": "Diseño, desarrollo y gobierno de contenido de extremo a extremo: arquitectura del sitio, esquemas de datos con Zod, accesibilidad de la navegación y automatización de CI.",
+  "approach": [
+    "Esquemas de revisión que rechazan durante el build entradas marcadas como públicas cuando no cumplen las reglas declaradas.",
+    "Verificación del HTML generado mediante títulos y slugs de proyectos no públicos y marcadores registrados de formación y credenciales.",
+    "Barra lateral con drawer accesible en móvil: navegación inerte mientras el menú está cerrado, contenido de fondo inerte mientras está abierto y retorno de foco al cerrar.",
+    "CI que ejecuta formato, escaneo de secretos, build, verificación de contenido y auditoría de dependencias en cada pull request; el despliegue usa Actions fijadas por SHA y permisos mínimos."
+  ],
+  "technologies": ["Astro", "TypeScript", "Zod", "GitHub Actions"],
+  "outcome": "Reconstrucción estática validada por CI y preparada para reemplazar el sitio anterior en GitHub Pages; el despliegue permanece pendiente de aprobación.",
+  "publicLinks": [
+    {
+      "label": "Repositorio en GitHub",
+      "url": "https://github.com/cknight775/cknight775.github.io"
+    }
+  ],
+  "evidence": [
+    {
+      "src": "/evidence/portafolio-personal-desktop.webp",
+      "alt": "Portada del sitio en escritorio, con la barra lateral fija y la tarjeta de resumen profesional.",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "src": "/evidence/portafolio-personal-proyectos.webp",
+      "alt": "Sección Proyectos en escritorio, mostrando el caso público \"Este portafolio\".",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "src": "/evidence/portafolio-personal-drawer-movil.webp",
+      "alt": "Menú de navegación abierto en móvil: logotipo y lista de enlaces a cada sección, con \"Inicio\" resaltado como sección activa.",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "notice": "El repositorio es público e incluye borradores institucionales sanitizados en preview, sin secretos, accesos, topologías ni detalles operacionales. Esos casos no se generan en producción sin aprobación.",
+  "review": {
+    "validation": "approved",
+    "visibility": "public",
+    "status": "active",
+    "opsec": "not-required",
+    "institutionalAuthorization": "not-required",
+    "repositoryPublication": "not-required",
+    "sanitized": true,
+    "verifiedLinks": [
+      {
+        "label": "Repositorio en GitHub",
+        "url": "https://github.com/cknight775/cknight775.github.io"
+      }
+    ],
+    "lastReviewed": "2026-09-11"
+  }
+}
