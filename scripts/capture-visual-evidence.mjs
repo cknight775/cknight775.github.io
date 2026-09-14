@@ -279,6 +279,40 @@ async function waitForImages(locator) {
   );
 }
 
+// A plain `locator.screenshot()` on an element taller than the viewport
+// makes Playwright capture "beyond the viewport", which on this page
+// mis-renders position: fixed/sticky elements (the skip link, the sidebar)
+// at coordinates relative to the *original* scroll position instead of the
+// expanded capture area — they bleed into the shot instead of staying put.
+// Growing the real viewport to fit the element first avoids that capture
+// mode entirely: everything renders through the normal (non-beyond-viewport)
+// path, so fixed/sticky elements land where they actually belong.
+async function screenshotWholeElement(page, locator, path) {
+  // scrollIntoViewIfNeeded() only scrolls until *some* part is visible, which
+  // for an element taller than the viewport can leave its top above y=0 (a
+  // negative box.y breaks the clip math below) or its bottom cut off.
+  // Aligning to the top explicitly guarantees box.y is ~0.
+  await locator.evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  const box = await locator.boundingBox();
+  if (!box) throw new Error(`Element not found for screenshot: ${path}`);
+
+  const viewport = page.viewportSize();
+  const neededHeight = Math.ceil(box.y + box.height) + 8;
+  if (neededHeight > viewport.height) {
+    await page.setViewportSize({ width: viewport.width, height: neededHeight });
+  }
+
+  await page.screenshot({
+    path,
+    clip: {
+      x: Math.floor(box.x),
+      y: Math.floor(box.y),
+      width: Math.ceil(box.width),
+      height: Math.ceil(box.height),
+    },
+  });
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const projectPaths = await discoverProjectPaths();
@@ -390,9 +424,11 @@ async function main() {
           const section = page.locator('.evidence-section');
           await section.scrollIntoViewIfNeeded();
           await waitForImages(section);
-          await section.screenshot({
-            path: `${OUT_DIR}/evidencia-${slug}-desktop.png`,
-          });
+          await screenshotWholeElement(
+            page,
+            section,
+            `${OUT_DIR}/evidencia-${slug}-desktop.png`,
+          );
         });
 
         await withPage(browser, VIEWPORTS.mobile, async (page) => {
@@ -400,9 +436,11 @@ async function main() {
           const section = page.locator('.evidence-section');
           await section.scrollIntoViewIfNeeded();
           await waitForImages(section);
-          await section.screenshot({
-            path: `${OUT_DIR}/evidencia-${slug}-mobile.png`,
-          });
+          await screenshotWholeElement(
+            page,
+            section,
+            `${OUT_DIR}/evidencia-${slug}-mobile.png`,
+          );
         });
       }
     }
