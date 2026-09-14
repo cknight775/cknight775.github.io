@@ -86,12 +86,24 @@ async function discoverProjectPaths() {
       paths.add(url.pathname);
     }
   }
-  return [...paths]
+  const projectPaths = [...paths]
     .filter((p) => p.startsWith('/proyectos/'))
     .map((path) => ({
       path,
       slug: path.replace(/^\/proyectos\//, '').replace(/\/$/, ''),
     }));
+
+  // Whether each project's built page has a rendered "Evidencia" gallery
+  // block, found by inspecting the static output rather than the browser —
+  // consistent with how paths themselves are discovered from the sitemap.
+  for (const project of projectPaths) {
+    const html = await readFile(
+      `${DIST_DIR}${project.path}index.html`,
+      'utf8',
+    ).catch(() => '');
+    project.hasGallery = html.includes('evidence-section');
+  }
+  return projectPaths;
 }
 
 // The full list of files this run must produce, independent of whether the
@@ -126,7 +138,7 @@ function buildManifest(projectPaths) {
       ...VIEWPORTS.desktop,
     });
   }
-  for (const { slug } of projectPaths) {
+  for (const { slug, hasGallery } of projectPaths) {
     manifest.push(
       {
         path: `${OUT_DIR}/caso-${slug}-desktop-1440x900.png`,
@@ -141,22 +153,51 @@ function buildManifest(projectPaths) {
         ...VIEWPORTS.tablet,
       },
     );
+    if (hasGallery) {
+      // The final rendered "Evidencia" gallery block itself (as opposed to
+      // the gallery-desktop-*/gallery-mobile-drawer-* source captures used to
+      // build the WebP assets it displays). It's an element screenshot, so
+      // its height is whatever the composed grid needs, not a fixed
+      // viewport size — validated as "non-trivial", not an exact match.
+      manifest.push(
+        {
+          path: `${OUT_DIR}/evidencia-${slug}-desktop.png`,
+          minWidth: 500,
+          minHeight: 100,
+        },
+        {
+          path: `${OUT_DIR}/evidencia-${slug}-mobile.png`,
+          minWidth: 300,
+          minHeight: 100,
+        },
+      );
+    }
   }
   return manifest;
 }
 
 async function verifyCaptures(manifest) {
   const problems = [];
-  for (const { path: filePath, width, height } of manifest) {
+  for (const entry of manifest) {
+    const { path: filePath } = entry;
     const fileStat = await stat(filePath).catch(() => null);
     if (!fileStat) {
       problems.push(`${filePath}: missing`);
       continue;
     }
     const metadata = await sharp(filePath).metadata();
-    if (metadata.width !== width || metadata.height !== height) {
+    const { width, height } = metadata;
+    if (!width || !height) {
+      problems.push(`${filePath}: unreadable or zero-size image`);
+    } else if ('width' in entry) {
+      if (width !== entry.width || height !== entry.height) {
+        problems.push(
+          `${filePath}: expected ${entry.width}x${entry.height}, got ${width}x${height}`,
+        );
+      }
+    } else if (width < entry.minWidth || height < entry.minHeight) {
       problems.push(
-        `${filePath}: expected ${width}x${height}, got ${metadata.width}x${metadata.height}`,
+        `${filePath}: expected at least ${entry.minWidth}x${entry.minHeight}, got ${width}x${height}`,
       );
     }
   }
@@ -220,14 +261,39 @@ async function openDrawer(page) {
   await page.waitForTimeout(250);
 }
 
+// The gallery images use loading="lazy", so scrolling a locator into view is
+// not enough to guarantee they've finished decoding by the time a screenshot
+// is taken; wait for every <img> inside it to report .complete.
+async function waitForImages(locator) {
+  await locator.locator('img').evaluateAll((imgs) =>
+    Promise.all(
+      imgs.map((img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise((resolve) => {
+              img.addEventListener('load', resolve, { once: true });
+              img.addEventListener('error', resolve, { once: true });
+            }),
+      ),
+    ),
+  );
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const projectPaths = await discoverProjectPaths();
+  if (projectPaths.length === 0) {
+    throw new Error(
+      'No public project pages discovered from the sitemap. Visual review ' +
+        'evidence assumes at least one public case study exists; if that is ' +
+        'no longer true, update this script deliberately instead of letting ' +
+        'it silently produce a smaller evidence set.',
+    );
+  }
   console.log(
-    `Discovered project pages from sitemap: ${
-      projectPaths.map((p) => `${p.path} (slug: ${p.slug})`).join(', ') ||
-      '(none)'
-    }`,
+    `Discovered project pages from sitemap: ${projectPaths
+      .map((p) => `${p.path} (slug: ${p.slug}, gallery: ${p.hasGallery})`)
+      .join(', ')}`,
   );
   const manifest = buildManifest(projectPaths);
 
@@ -292,7 +358,7 @@ async function main() {
       });
     });
 
-    for (const { path: projectPath, slug } of projectPaths) {
+    for (const { path: projectPath, slug, hasGallery } of projectPaths) {
       await withPage(browser, VIEWPORTS.desktop, async (page) => {
         await goto(page, projectPath);
         await page.screenshot({
@@ -313,6 +379,32 @@ async function main() {
           path: `${OUT_DIR}/caso-${slug}-tablet-768x1024.png`,
         });
       });
+
+      if (hasGallery) {
+        // The final assembled "Evidencia" block as actually rendered, not
+        // the gallery-desktop-*/gallery-mobile-drawer-* source captures used
+        // to build the images it displays. An element screenshot, so it
+        // captures the whole composition regardless of its height.
+        await withPage(browser, VIEWPORTS.desktop, async (page) => {
+          await goto(page, projectPath);
+          const section = page.locator('.evidence-section');
+          await section.scrollIntoViewIfNeeded();
+          await waitForImages(section);
+          await section.screenshot({
+            path: `${OUT_DIR}/evidencia-${slug}-desktop.png`,
+          });
+        });
+
+        await withPage(browser, VIEWPORTS.mobile, async (page) => {
+          await goto(page, projectPath);
+          const section = page.locator('.evidence-section');
+          await section.scrollIntoViewIfNeeded();
+          await waitForImages(section);
+          await section.screenshot({
+            path: `${OUT_DIR}/evidencia-${slug}-mobile.png`,
+          });
+        });
+      }
     }
   } finally {
     await browser.close();
